@@ -17,12 +17,12 @@ func (a *Assertion) EqualBool(value, other bool, msgArgs ...interface{}) bool {
 
 // True returns true if a given bool value is true
 func (a *Assertion) True(value bool, msgArgs ...interface{}) bool {
-	return a.EqualBool(value, true)
+	return a.EqualBool(value, true, msgArgs...)
 }
 
 // False returns true if a given bool value is false
 func (a *Assertion) False(value bool, msgArgs ...interface{}) bool {
-	return a.EqualBool(value, false)
+	return a.EqualBool(value, false, msgArgs...)
 }
 
 // Boolean returns true if a given string is one of the following accepted forms:
