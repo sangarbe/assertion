@@ -54,7 +54,7 @@ func (a *Assertion) Falsy(value string, msgArgs ...interface{}) bool {
 		return !b
 	}
 
-	a.appendError(fmt.Sprintf("%s is not a valid truthy string", value), msgArgs...)
+	a.appendError(fmt.Sprintf("%s is not a valid falsy string", value), msgArgs...)
 	return false
 }
 
@@ -87,7 +87,7 @@ func (a *Assertion) EqualInt8(value, other int8, msgArgs ...interface{}) bool {
 
 // EqualInt returns true if a given int value is equal to other int value
 func (a *Assertion) EqualInt(value, other int, msgArgs ...interface{}) bool {
-	return a.EqualInt64(int64(value), int64(other))
+	return a.EqualInt64(int64(value), int64(other), msgArgs...)
 }
 
 // EqualFloat64 returns true if a given float64 value is equal to other float64 value

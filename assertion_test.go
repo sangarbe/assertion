@@ -1,6 +1,7 @@
 package assertion
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"reflect"
 	"testing"
@@ -28,25 +29,45 @@ func TestAssertion_ErrorAt(t *testing.T) {
 	assert.Nil(t, a.ErrorAt(-3))
 }
 
-func TestAssertion_EqualBool(t *testing.T) {
-	assertMethod(t, "EqualBool", []interface{}{true, true}, true)
-	assertMethod(t, "EqualBool", []interface{}{false, true}, false, "false is not true")
-	assertMethod(t, "EqualBool", []interface{}{false, true, "custom error"}, false, "custom error")
-	assertMethod(t, "EqualBool", []interface{}{false, true, "%s", "custom error"}, false, "custom error")
-}
+func TestAssertion_AllAssertMethods(t *testing.T) {
+	data := []struct {
+		method string
+		okArgs []interface{}
+		koArgs []interface{}
+		errMsg string
+	}{
+		{"EqualBool", []interface{}{true, true}, []interface{}{true, false}, "true is not false"},
+		{"True", []interface{}{true}, []interface{}{false}, "false is not true"},
+		{"False", []interface{}{false}, []interface{}{true}, "true is not false"},
+		{"Boolean", []interface{}{"true"}, []interface{}{"on"}, "on is not a valid boolean string"},
+		{"Boolean", []interface{}{"TRUE"}, []interface{}{"on"}, "on is not a valid boolean string"},
+		{"Boolean", []interface{}{"t"}, []interface{}{"on"}, "on is not a valid boolean string"},
+		{"Boolean", []interface{}{"T"}, []interface{}{"on"}, "on is not a valid boolean string"},
+		{"Boolean", []interface{}{"1"}, []interface{}{"on"}, "on is not a valid boolean string"},
+		{"Boolean", []interface{}{"false"}, []interface{}{"off"}, "off is not a valid boolean string"},
+		{"Boolean", []interface{}{"FALSE"}, []interface{}{"off"}, "off is not a valid boolean string"},
+		{"Boolean", []interface{}{"f"}, []interface{}{"off"}, "off is not a valid boolean string"},
+		{"Boolean", []interface{}{"F"}, []interface{}{"off"}, "off is not a valid boolean string"},
+		{"Boolean", []interface{}{"0"}, []interface{}{"off"}, "off is not a valid boolean string"},
+		{"Truthy", []interface{}{"true"}, []interface{}{"on"}, "on is not a valid truthy string"},
+		{"Truthy", []interface{}{"TRUE"}, []interface{}{"on"}, "on is not a valid truthy string"},
+		{"Truthy", []interface{}{"t"}, []interface{}{"on"}, "on is not a valid truthy string"},
+		{"Truthy", []interface{}{"T"}, []interface{}{"on"}, "on is not a valid truthy string"},
+		{"Truthy", []interface{}{"1"}, []interface{}{"on"}, "on is not a valid truthy string"},
+		{"Falsy", []interface{}{"false"}, []interface{}{"off"}, "off is not a valid falsy string"},
+		{"Falsy", []interface{}{"FALSE"}, []interface{}{"off"}, "off is not a valid falsy string"},
+		{"Falsy", []interface{}{"f"}, []interface{}{"off"}, "off is not a valid falsy string"},
+		{"Falsy", []interface{}{"F"}, []interface{}{"off"}, "off is not a valid falsy string"},
+		{"Falsy", []interface{}{"0"}, []interface{}{"off"}, "off is not a valid falsy string"},
+		{"EqualInt", []interface{}{1, 1}, []interface{}{1, 0}, "1 is not equal 0"},
+		//{"EqualInt64", []interface{}{1, 1}, []interface{}{1, 0}, "1 is not equal 0"},
+	}
 
-func TestAssertion_True(t *testing.T) {
-	assertMethod(t, "True", []interface{}{true}, true)
-	assertMethod(t, "True", []interface{}{false}, false, "false is not true")
-	assertMethod(t, "True", []interface{}{false, "custom error"}, false, "custom error")
-	assertMethod(t, "True", []interface{}{false, "%s", "custom error"}, false, "custom error")
-}
-
-func TestAssertion_False(t *testing.T) {
-	assertMethod(t, "False", []interface{}{false}, true)
-	assertMethod(t, "False", []interface{}{true}, false, "true is not false")
-	assertMethod(t, "False", []interface{}{true, "custom error"}, false, "custom error")
-	assertMethod(t, "False", []interface{}{true, "%s", "custom error"}, false, "custom error")
+	for _, i := range data {
+		t.Run(fmt.Sprintf("%s %v%v", i.method, i.okArgs, i.koArgs), func(t *testing.T) {
+			assertMethod(t, i.method, i.okArgs, i.koArgs, i.errMsg)
+		})
+	}
 }
 
 func TestAssertion_GreaterThanInt(t *testing.T) {
@@ -88,7 +109,14 @@ func TestAssertion_EqualInt32(t *testing.T) {
 	assert.EqualError(t, a.ErrorAt(0), "1 is not equal 2")
 }
 
-func assertMethod(t *testing.T, method string, params []interface{}, valid bool, err ...string) {
+func assertMethod(t *testing.T, method string, okArgs []interface{}, koArgs []interface{}, errMsg string) {
+	assertMethodMeetsExpectations(t, method, okArgs, true)
+	assertMethodMeetsExpectations(t, method, koArgs, false, errMsg)
+	assertMethodMeetsExpectations(t, method, append(koArgs, "custom error"), false, "custom error")
+	assertMethodMeetsExpectations(t, method, append(koArgs, "%s", "custom error"), false, "custom error")
+}
+
+func assertMethodMeetsExpectations(t *testing.T, method string, params []interface{}, valid bool, err ...string) {
 	a := New()
 	m := reflect.ValueOf(&a).MethodByName(method)
 
