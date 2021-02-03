@@ -4,9 +4,30 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
+	"strings"
 )
 
-var emailRegex = regexp.MustCompile(`\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z`)
+var (
+	rexText          = "[0-9A-Za-z!#-'*+\\-/=?^_`{-~]"
+	rexDottedString  = fmt.Sprintf(`(?:%s)+(\.(?:%s)+)*`, rexText, rexText)
+	rexQuotedText    = `[ !#-\[\]-~]`
+	rexQuotedPair    = `\\[ -~]`
+	rexQuotedContent = fmt.Sprintf(`(?:%s)|(?:%s)`, rexQuotedText, rexQuotedPair)
+	rexOctet         = `0|25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]?`
+	rexQuotedString  = fmt.Sprintf(`"(?:%s)*"`, rexQuotedContent)
+	rexLocalPart     = fmt.Sprintf(`(?:%s)|(?:%s)`, rexDottedString, rexQuotedString)
+	rexIPv4Octets    = fmt.Sprintf(`(?:%s)(\.(?:%s)){3}`, rexOctet, rexOctet)
+	rexSubdomain     = `[0-9A-Za-z]([\-0-9A-Za-z]{0,61}[0-9A-Za-z])?`
+	rexDomain        = fmt.Sprintf(`(?:%s)(?:\.(?:%s))+`, rexSubdomain, rexSubdomain)
+	rexIPv4OrDomain  = fmt.Sprintf(`(?:\[%s\])|(?:%s)`, rexIPv4Octets, rexDomain)
+	rexEmail         = fmt.Sprintf(`^(?:%s)@(?:%s)$`, rexLocalPart, rexIPv4OrDomain)
+	rexIPv4          = fmt.Sprintf(`^%s$`, rexIPv4Octets)
+)
+
+var (
+	regexpEmail = regexp.MustCompile(rexEmail)
+	regexpIpv4  = regexp.MustCompile(rexIPv4)
+)
 
 // EqualBool returns true if a given bool value is equal to other bool value
 func (a *Assertion) EqualBool(value, other bool, msgArgs ...interface{}) bool {
@@ -31,7 +52,7 @@ func (a *Assertion) False(value bool, msgArgs ...interface{}) bool {
 // Boolean returns true if a given string is one of the following accepted forms:
 // true, false, TRUE, FALSE, t, f, 1, or 0
 func (a *Assertion) Boolean(value string, msgArgs ...interface{}) bool {
-	if _, err := strconv.ParseBool(value); err == nil{
+	if _, err := strconv.ParseBool(value); err == nil {
 		return true
 	}
 
@@ -42,7 +63,7 @@ func (a *Assertion) Boolean(value string, msgArgs ...interface{}) bool {
 // Truthy returns true if a given string is one of the following accepted forms:
 // true, TRUE, t, or 1
 func (a *Assertion) Truthy(value string, msgArgs ...interface{}) bool {
-	if b, err := strconv.ParseBool(value); err == nil{
+	if b, err := strconv.ParseBool(value); err == nil {
 		return b
 	}
 
@@ -53,7 +74,7 @@ func (a *Assertion) Truthy(value string, msgArgs ...interface{}) bool {
 // Falsy returns true if a given string is one of the following accepted forms:
 // true, false, TRUE, FALSE, t, f, 1, and 0
 func (a *Assertion) Falsy(value string, msgArgs ...interface{}) bool {
-	if b, err := strconv.ParseBool(value); err == nil{
+	if b, err := strconv.ParseBool(value); err == nil {
 		return !b
 	}
 
@@ -148,10 +169,23 @@ func (a *Assertion) LowerThanOrEqualInt(value, max int64, msgArgs ...interface{}
 
 // Email returns true if a given value is a valid email format
 func (a *Assertion) Email(value string, msgArgs ...interface{}) bool {
-	if emailRegex.MatchString(value) {
-		return true
+	if !regexpEmail.MatchString(value) {
+		a.appendError(fmt.Sprintf("email %s is invalid", value), msgArgs...)
+		return false
 	}
 
-	a.appendError(fmt.Sprintf("email %s is invalid", value), msgArgs...)
-	return false
+	splits := strings.Split(value, "@")
+	domain := splits[len(splits)-1]
+	if len(domain) > 255 {
+		a.appendError(fmt.Sprintf("email %s is invalid", value), msgArgs...)
+		return false
+	}
+
+	if regexpIpv4.MatchString(domain) {
+		a.appendError(fmt.Sprintf("email %s is invalid", value), msgArgs...)
+		return false
+	}
+
+	return true
+
 }
