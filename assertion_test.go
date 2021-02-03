@@ -60,7 +60,7 @@ func TestAssertion_AllAssertMethods(t *testing.T) {
 		{"Falsy", []interface{}{"F"}, []interface{}{"off"}, "off is not a valid falsy string"},
 		{"Falsy", []interface{}{"0"}, []interface{}{"off"}, "off is not a valid falsy string"},
 		{"EqualInt", []interface{}{1, 1}, []interface{}{1, 0}, "1 is not equal 0"},
-		//{"EqualInt64", []interface{}{1, 1}, []interface{}{1, 0}, "1 is not equal 0"},
+		{"EqualInt64", []interface{}{1, 1}, []interface{}{1, 0}, "1 is not equal 0"},
 	}
 
 	for _, i := range data {
@@ -119,10 +119,22 @@ func assertMethod(t *testing.T, method string, okArgs []interface{}, koArgs []in
 func assertMethodMeetsExpectations(t *testing.T, method string, params []interface{}, valid bool, err ...string) {
 	a := New()
 	m := reflect.ValueOf(&a).MethodByName(method)
+	f := m.Type()
 
 	in := make([]reflect.Value, len(params))
 	for k, param := range params {
-		in[k] = reflect.ValueOf(param)
+		v := reflect.ValueOf(param)
+		if k >= f.NumIn()-1 {
+			in[k] = v
+			continue
+		}
+
+		if f.In(k).Kind() == reflect.TypeOf(param).Kind() {
+			in[k] = v
+			continue
+		}
+
+		in[k] = v.Convert(f.In(k))
 	}
 
 	var result []reflect.Value
