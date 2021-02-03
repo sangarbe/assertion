@@ -60,7 +60,24 @@ func TestAssertion_AllAssertMethods(t *testing.T) {
 		{"Falsy", []interface{}{"F"}, []interface{}{"off"}, "off is not a valid falsy string"},
 		{"Falsy", []interface{}{"0"}, []interface{}{"off"}, "off is not a valid falsy string"},
 		{"EqualInt", []interface{}{1, 1}, []interface{}{1, 0}, "1 is not equal 0"},
+		{"EqualInt8", []interface{}{1, 1}, []interface{}{1, 0}, "1 is not equal 0"},
+		{"EqualInt16", []interface{}{1, 1}, []interface{}{1, 0}, "1 is not equal 0"},
+		{"EqualInt32", []interface{}{1, 1}, []interface{}{1, 0}, "1 is not equal 0"},
 		{"EqualInt64", []interface{}{1, 1}, []interface{}{1, 0}, "1 is not equal 0"},
+		{"EqualFloat32", []interface{}{1.5, 1.5}, []interface{}{1.5, 0.5}, "1.50 is not equal 0.50"},
+		{"EqualFloat64", []interface{}{1.5, 1.5}, []interface{}{1.5, 0.5}, "1.50 is not equal 0.50"},
+		{"GreaterThanInt", []interface{}{1, 0}, []interface{}{1, 1}, "1 is not greater than 1"},
+		{"LowerThanInt", []interface{}{0, 1}, []interface{}{1, 1}, "1 is not lower than 1"},
+		{"GreaterThanOrEqualInt", []interface{}{1, 0}, []interface{}{0, 1}, "0 is not greater than or equal 1"},
+		{"GreaterThanOrEqualInt", []interface{}{1, 1}, []interface{}{0, 1}, "0 is not greater than or equal 1"},
+		{"LowerThanOrEqualInt", []interface{}{0, 1}, []interface{}{1, 0}, "1 is not lower than or equal 0"},
+		{"LowerThanOrEqualInt", []interface{}{1, 1}, []interface{}{1, 0}, "1 is not lower than or equal 0"},
+		{"Email", []interface{}{"test@mail.com"}, []interface{}{"@mail.com"}, "email @mail.com is invalid"},
+		{"Email", []interface{}{"test@subdomain.mail.com"}, []interface{}{"@mail.com"}, "email @mail.com is invalid"},
+		{"Email", []interface{}{"0123456789@mail.com"}, []interface{}{"@mail.com"}, "email @mail.com is invalid"},
+		{"Email", []interface{}{"first.last@mail.com"}, []interface{}{"@mail.com"}, "email @mail.com is invalid"},
+		{"Email", []interface{}{"first+last@mail.com"}, []interface{}{"@mail.com"}, "email @mail.com is invalid"},
+		{"Email", []interface{}{"first-last@mail.com"}, []interface{}{"@mail.com"}, "email @mail.com is invalid"},
 	}
 
 	for _, i := range data {
@@ -68,45 +85,6 @@ func TestAssertion_AllAssertMethods(t *testing.T) {
 			assertMethod(t, i.method, i.okArgs, i.koArgs, i.errMsg)
 		})
 	}
-}
-
-func TestAssertion_GreaterThanInt(t *testing.T) {
-	a := New()
-	a.GreaterThanInt(1, 0)
-
-	assert.False(t, a.HasErrors())
-	assert.Equal(t, 0, a.CountErrors())
-
-	a.GreaterThanInt(1, 1)
-
-	assert.True(t, a.HasErrors())
-	assert.Equal(t, 1, a.CountErrors())
-}
-
-func TestAssertion_EqualInt64(t *testing.T) {
-	a := New()
-
-	assert.True(t, a.EqualInt64(1, 1))
-	assert.False(t, a.HasErrors())
-	assert.Equal(t, 0, a.CountErrors())
-
-	assert.False(t, a.EqualInt64(1, 2))
-	assert.True(t, a.HasErrors())
-	assert.Equal(t, 1, a.CountErrors())
-	assert.EqualError(t, a.ErrorAt(0), "1 is not equal 2")
-}
-
-func TestAssertion_EqualInt32(t *testing.T) {
-	a := New()
-
-	assert.True(t, a.EqualInt32(1, 1))
-	assert.False(t, a.HasErrors())
-	assert.Equal(t, 0, a.CountErrors())
-
-	assert.False(t, a.EqualInt32(1, 2))
-	assert.True(t, a.HasErrors())
-	assert.Equal(t, 1, a.CountErrors())
-	assert.EqualError(t, a.ErrorAt(0), "1 is not equal 2")
 }
 
 func assertMethod(t *testing.T, method string, okArgs []interface{}, koArgs []interface{}, errMsg string) {
