@@ -8,12 +8,12 @@ import (
 )
 
 const (
-	errMsgNotEqual = `%v is not equal %v`
-	errMsgNotValid = `%v is not a valid %v`
-	errMsgNotGreater = `%v is not greater than %v`
-	errMsgNotLower = `%v is not lower than %v`
+	errMsgNotEqual        = `%v is not equal %v`
+	errMsgNotValid        = `%v is not a valid %v`
+	errMsgNotGreater      = `%v is not greater than %v`
+	errMsgNotLower        = `%v is not lower than %v`
 	errMsgNotGreaterEqual = `%v is not greater than or equal %v`
-	errMsgNotLowerEqual = `%v is not lower than or equal %v`
+	errMsgNotLowerEqual   = `%v is not lower than or equal %v`
 )
 
 var (
@@ -197,4 +197,14 @@ func (a *Assertion) Email(value string, msgArgs ...interface{}) bool {
 	}
 
 	return true
+}
+
+// Ipv4 returns true if a given value is a valid ipv4 format
+func (a *Assertion) Ipv4(value string, msgArgs ...interface{}) bool {
+	if regexpIpv4.MatchString(value) {
+		return true
+	}
+
+	a.appendError(fmt.Sprintf(errMsgNotValid, value, "ipv4"), msgArgs...)
+	return false
 }

@@ -82,6 +82,10 @@ func TestAssertion_AllAssertMethodsReturnOk(t *testing.T) {
 		{"Email", []interface{}{"test@[0.0.0.0]"}},
 		{"Email", []interface{}{"email@111.222.333.44444"}},
 		{"Email", []interface{}{"test@" + strings.Repeat("subd.", 50) + "com"}},
+		{"Ipv4", []interface{}{"127.0.0.1"}},
+		{"Ipv4", []interface{}{"255.255.255.255"}},
+		{"Ipv4", []interface{}{"0.0.0.0"}},
+		{"Ipv4", []interface{}{"199.160.1.10"}},
 	}
 
 	for _, i := range data {
@@ -152,6 +156,11 @@ func TestAssertion_AllAssertMethodsReturnKo(t *testing.T) {
 		{"Email", []interface{}{"first last@example.com"}, "first last@example.com is not a valid email"},
 		{"Email", []interface{}{"test@" + strings.Repeat("subd.", 50) + "com.es"}, "test@" + strings.Repeat("subd.", 50) + "com.es is not a valid email"},
 		{"Email", []interface{}{"test@0.0.0.0"}, "test@0.0.0.0 is not a valid email"},
+		{"Ipv4", []interface{}{"127.0.01"}, "127.0.01 is not a valid ipv4"},
+		{"Ipv4", []interface{}{"256.0.0.1"}, "256.0.0.1 is not a valid ipv4"},
+		{"Ipv4", []interface{}{"0.0.0.0.0"}, "0.0.0.0.0 is not a valid ipv4"},
+		{"Ipv4", []interface{}{"0.0.0.1234"}, "0.0.0.1234 is not a valid ipv4"},
+		{"Ipv4", []interface{}{"0-0-0-0"}, "0-0-0-0 is not a valid ipv4"},
 	}
 
 	for _, i := range data {
