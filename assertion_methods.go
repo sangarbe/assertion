@@ -7,6 +7,15 @@ import (
 	"strings"
 )
 
+const (
+	errMsgNotEqual = `%v is not equal %v`
+	errMsgNotValid = `%v is not a valid %v`
+	errMsgNotGreater = `%v is not greater than %v`
+	errMsgNotLower = `%v is not lower than %v`
+	errMsgNotGreaterEqual = `%v is not greater than or equal %v`
+	errMsgNotLowerEqual = `%v is not lower than or equal %v`
+)
+
 var (
 	rexText          = "[0-9A-Za-z!#-'*+\\-/=?^_`{-~]"
 	rexDottedString  = fmt.Sprintf(`(?:%s)+(\.(?:%s)+)*`, rexText, rexText)
@@ -35,7 +44,7 @@ func (a *Assertion) EqualBool(value, other bool, msgArgs ...interface{}) bool {
 		return true
 	}
 
-	a.appendError(fmt.Sprintf("%t is not %t", value, other), msgArgs...)
+	a.appendError(fmt.Sprintf(errMsgNotEqual, value, other), msgArgs...)
 	return false
 }
 
@@ -56,7 +65,7 @@ func (a *Assertion) Boolean(value string, msgArgs ...interface{}) bool {
 		return true
 	}
 
-	a.appendError(fmt.Sprintf("%s is not a valid boolean string", value), msgArgs...)
+	a.appendError(fmt.Sprintf(errMsgNotValid, value, "boolean string"), msgArgs...)
 	return false
 }
 
@@ -67,7 +76,7 @@ func (a *Assertion) Truthy(value string, msgArgs ...interface{}) bool {
 		return b
 	}
 
-	a.appendError(fmt.Sprintf("%s is not a valid truthy string", value), msgArgs...)
+	a.appendError(fmt.Sprintf(errMsgNotValid, value, "truthy string"), msgArgs...)
 	return false
 }
 
@@ -78,7 +87,7 @@ func (a *Assertion) Falsy(value string, msgArgs ...interface{}) bool {
 		return !b
 	}
 
-	a.appendError(fmt.Sprintf("%s is not a valid falsy string", value), msgArgs...)
+	a.appendError(fmt.Sprintf(errMsgNotValid, value, "falsy string"), msgArgs...)
 	return false
 }
 
@@ -88,7 +97,7 @@ func (a *Assertion) EqualInt64(value, other int64, msgArgs ...interface{}) bool 
 		return true
 	}
 
-	a.appendError(fmt.Sprintf("%d is not equal %d", value, other), msgArgs...)
+	a.appendError(fmt.Sprintf(errMsgNotEqual, value, other), msgArgs...)
 	return false
 }
 
@@ -118,7 +127,7 @@ func (a *Assertion) EqualFloat64(value, other float64, msgArgs ...interface{}) b
 		return true
 	}
 
-	a.appendError(fmt.Sprintf("%.2f is not equal %.2f", value, other), msgArgs...)
+	a.appendError(fmt.Sprintf(errMsgNotEqual, value, other), msgArgs...)
 	return false
 }
 
@@ -133,7 +142,7 @@ func (a *Assertion) GreaterThanInt(value, min int64, msgArgs ...interface{}) boo
 		return true
 	}
 
-	a.appendError(fmt.Sprintf("%d is not greater than %d", value, min), msgArgs...)
+	a.appendError(fmt.Sprintf(errMsgNotGreater, value, min), msgArgs...)
 	return false
 }
 
@@ -143,7 +152,7 @@ func (a *Assertion) GreaterThanOrEqualInt(value, min int64, msgArgs ...interface
 		return true
 	}
 
-	a.appendError(fmt.Sprintf("%d is not greater than or equal %d", value, min), msgArgs...)
+	a.appendError(fmt.Sprintf(errMsgNotGreaterEqual, value, min), msgArgs...)
 	return false
 }
 
@@ -153,7 +162,7 @@ func (a *Assertion) LowerThanInt(value, max int64, msgArgs ...interface{}) bool 
 		return true
 	}
 
-	a.appendError(fmt.Sprintf("%d is not lower than %d", value, max), msgArgs...)
+	a.appendError(fmt.Sprintf(errMsgNotLower, value, max), msgArgs...)
 	return false
 }
 
@@ -163,29 +172,29 @@ func (a *Assertion) LowerThanOrEqualInt(value, max int64, msgArgs ...interface{}
 		return true
 	}
 
-	a.appendError(fmt.Sprintf("%d is not lower than or equal %d", value, max), msgArgs...)
+	a.appendError(fmt.Sprintf(errMsgNotLowerEqual, value, max), msgArgs...)
 	return false
 }
 
-// Email returns true if a given value is a valid email format
+// Email returns true if a given value is a valid email format. It allows local
+// portion to be quoted text and ipv4 for the domain portion (between square brackets).
 func (a *Assertion) Email(value string, msgArgs ...interface{}) bool {
 	if !regexpEmail.MatchString(value) {
-		a.appendError(fmt.Sprintf("email %s is invalid", value), msgArgs...)
+		a.appendError(fmt.Sprintf(errMsgNotValid, value, "email"), msgArgs...)
 		return false
 	}
 
 	splits := strings.Split(value, "@")
 	domain := splits[len(splits)-1]
 	if len(domain) > 255 {
-		a.appendError(fmt.Sprintf("email %s is invalid", value), msgArgs...)
+		a.appendError(fmt.Sprintf(errMsgNotValid, value, "email"), msgArgs...)
 		return false
 	}
 
 	if regexpIpv4.MatchString(domain) {
-		a.appendError(fmt.Sprintf("email %s is invalid", value), msgArgs...)
+		a.appendError(fmt.Sprintf(errMsgNotValid, value, "email"), msgArgs...)
 		return false
 	}
 
 	return true
-
 }
