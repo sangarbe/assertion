@@ -86,6 +86,9 @@ func TestAssertion_AllAssertMethodsReturnOk(t *testing.T) {
 		{"Ipv4", []interface{}{"255.255.255.255"}},
 		{"Ipv4", []interface{}{"0.0.0.0"}},
 		{"Ipv4", []interface{}{"199.160.1.10"}},
+		{"Alfanum", []interface{}{"abc123"}},
+		{"Alfanum", []interface{}{"ABC098"}},
+		{"Alfanum", []interface{}{"España"}},
 	}
 
 	for _, i := range data {
@@ -161,6 +164,9 @@ func TestAssertion_AllAssertMethodsReturnKo(t *testing.T) {
 		{"Ipv4", []interface{}{"0.0.0.0.0"}, "0.0.0.0.0 is not a valid ipv4"},
 		{"Ipv4", []interface{}{"0.0.0.1234"}, "0.0.0.1234 is not a valid ipv4"},
 		{"Ipv4", []interface{}{"0-0-0-0"}, "0-0-0-0 is not a valid ipv4"},
+		{"Alfanum", []interface{}{"abc 123"}, "abc 123 is not alfa-numeric"},
+		{"Alfanum", []interface{}{"abc.123"}, "abc.123 is not alfa-numeric"},
+		{"Alfanum", []interface{}{"abc#123"}, "abc#123 is not alfa-numeric"},
 	}
 
 	for _, i := range data {

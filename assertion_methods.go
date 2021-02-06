@@ -5,9 +5,11 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"unicode"
 )
 
 const (
+	errMsgNot             = `%v is not %v`
 	errMsgNotEqual        = `%v is not equal %v`
 	errMsgNotValid        = `%v is not a valid %v`
 	errMsgNotGreater      = `%v is not greater than %v`
@@ -207,4 +209,16 @@ func (a *Assertion) Ipv4(value string, msgArgs ...interface{}) bool {
 
 	a.appendError(fmt.Sprintf(errMsgNotValid, value, "ipv4"), msgArgs...)
 	return false
+}
+
+// Alfanum returns true if a given value only contains alfa-numeric runes.
+func (a *Assertion) Alfanum(value string, msgArgs ...interface{}) bool {
+	for _, r := range value {
+		if !unicode.IsLetter(r) && !unicode.IsNumber(r) {
+			a.appendError(fmt.Sprintf(errMsgNot, value, "alfa-numeric"), msgArgs...)
+			return false
+		}
+	}
+
+	return true
 }
