@@ -34,11 +34,13 @@ var (
 	rexIPv4OrDomain  = fmt.Sprintf(`(?:\[%s\])|(?:%s)`, rexIPv4Octets, rexDomain)
 	rexEmail         = fmt.Sprintf(`^(?:%s)@(?:%s)$`, rexLocalPart, rexIPv4OrDomain)
 	rexIPv4          = fmt.Sprintf(`^%s$`, rexIPv4Octets)
+	rexE164          = `^\+?[1-9]\d{1,14}$`
 )
 
 var (
 	regexpEmail = regexp.MustCompile(rexEmail)
 	regexpIpv4  = regexp.MustCompile(rexIPv4)
+	regexpE164  = regexp.MustCompile(rexE164)
 )
 
 // EqualBool returns true if a given bool value is equal to other bool value
@@ -227,9 +229,19 @@ func (a *Assertion) Alfanum(value string, msgArgs ...interface{}) bool {
 // Base64 returns true if a given value ia a valid base64 encoded string
 func (a *Assertion) Base64(value string, msgArgs ...interface{}) bool {
 	_, err := base64.StdEncoding.DecodeString(value)
-	if err!=nil{
+	if err != nil {
 		a.appendError(fmt.Sprintf(errMsgNotValid, value, "base64 encoded value"), msgArgs...)
 		return false
 	}
+	return true
+}
+
+// Phone returns true if a given value ia a valid e164 phone number
+func (a *Assertion) Phone(value string, msgArgs ...interface{}) bool {
+	if !regexpE164.MatchString(value) {
+		a.appendError(fmt.Sprintf(errMsgNotValid, value, "phone"), msgArgs...)
+		return false
+	}
+
 	return true
 }

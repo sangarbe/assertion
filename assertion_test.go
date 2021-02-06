@@ -90,6 +90,9 @@ func TestAssertion_AllAssertMethodsReturnOk(t *testing.T) {
 		{"Alfanum", []interface{}{"ABC098"}},
 		{"Alfanum", []interface{}{"España"}},
 		{"Base64", []interface{}{"c29tZSBkYXRhIHdpdGggACBhbmQg77u/"}},
+		{"Phone", []interface{}{"+33626525690"}},
+		{"Phone", []interface{}{"33626525690"}},
+		{"Phone", []interface{}{"+16174552211"}},
 	}
 
 	for _, i := range data {
@@ -170,6 +173,8 @@ func TestAssertion_AllAssertMethodsReturnKo(t *testing.T) {
 		{"Alfanum", []interface{}{"abc#123"}, "abc#123 is not alfa-numeric"},
 		{"Base64", []interface{}{"c29tZSBkYXRhIHdpdGggACBhbmQg77u"}, "c29tZSBkYXRhIHdpdGggACBhbmQg77u is not a valid base64 encoded value"},
 		{"Base64", []interface{}{"c29tZSBkYXRhIHdpdGggACBhbmQg77u/,"}, "c29tZSBkYXRhIHdpdGggACBhbmQg77u/, is not a valid base64 encoded value"},
+		{"Phone", []interface{}{"+3362652569e"}, "+3362652569e is not a valid phone"},
+		{"Phone", []interface{}{"+3361231231232652569"}, "+3361231231232652569 is not a valid phone"},
 	}
 
 	for _, i := range data {
