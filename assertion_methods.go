@@ -74,6 +74,16 @@ func (a *Assertion) Boolean(value string, msgArgs ...interface{}) bool {
 	return false
 }
 
+// Integer returns true if a given string can be parsed as a valid integer value
+func (a *Assertion) Integer(value string, msgArgs ...interface{}) bool {
+	if _, err := strconv.ParseInt(value, 0, 64); err == nil {
+		return true
+	}
+
+	a.appendError(fmt.Sprintf(errMsgNotValid, value, "integer"), msgArgs...)
+	return false
+}
+
 // Truthy returns true if a given string is one of the following accepted forms:
 // true, TRUE, t, or 1
 func (a *Assertion) Truthy(value string, msgArgs ...interface{}) bool {

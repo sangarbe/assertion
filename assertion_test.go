@@ -93,6 +93,12 @@ func TestAssertion_AllAssertMethodsReturnOk(t *testing.T) {
 		{"Phone", []interface{}{"+33626525690"}},
 		{"Phone", []interface{}{"33626525690"}},
 		{"Phone", []interface{}{"+16174552211"}},
+		{"Integer", []interface{}{"16174552211"}},
+		{"Integer", []interface{}{"110110101"}},
+		{"Integer", []interface{}{"110_110_101"}},
+		{"Integer", []interface{}{"0b110110101"}},
+		{"Integer", []interface{}{"0o110110101"}},
+		{"Integer", []interface{}{"0x110110101"}},
 	}
 
 	for _, i := range data {
@@ -175,6 +181,10 @@ func TestAssertion_AllAssertMethodsReturnKo(t *testing.T) {
 		{"Base64", []interface{}{"c29tZSBkYXRhIHdpdGggACBhbmQg77u/,"}, "c29tZSBkYXRhIHdpdGggACBhbmQg77u/, is not a valid base64 encoded value"},
 		{"Phone", []interface{}{"+3362652569e"}, "+3362652569e is not a valid phone"},
 		{"Phone", []interface{}{"+3361231231232652569"}, "+3361231231232652569 is not a valid phone"},
+		{"Integer", []interface{}{"0b110110102"}, "0b110110102 is not a valid integer"},
+		{"Integer", []interface{}{"0x11011010G"}, "0x11011010G is not a valid integer"},
+		{"Integer", []interface{}{"0o110110108"}, "0o110110108 is not a valid integer"},
+		{"Integer", []interface{}{"110.110.108"}, "110.110.108 is not a valid integer"},
 	}
 
 	for _, i := range data {
