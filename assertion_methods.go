@@ -10,14 +10,16 @@ import (
 )
 
 const (
-	errMsgNot             = `%v is not %v`
-	errMsgNotEqual        = `%v is not equal %v`
-	errMsgNotValid        = `%v is not a valid %v`
-	errMsgNotGreater      = `%v is not greater than %v`
-	errMsgNotLower        = `%v is not lower than %v`
-	errMsgNotGreaterEqual = `%v is not greater than or equal %v`
-	errMsgNotLowerEqual   = `%v is not lower than or equal %v`
-	errMsgNotDifferent    = `%v is not different %v`
+	errMsgNot               = `%v is not %v`
+	errMsgNotEqual          = `%v is not equal %v`
+	errMsgNotValid          = `%v is not a valid %v`
+	errMsgNotGreater        = `%v is not greater than %v`
+	errMsgNotLower          = `%v is not lower than %v`
+	errMsgNotGreaterEqual   = `%v is not greater than or equal %v`
+	errMsgNotLowerEqual     = `%v is not lower than or equal %v`
+	errMsgNotDifferent      = `%v is not different %v`
+	errMsgNotBetween        = `%v is not between %v and %v`
+	errMsgNotBetweenExclude = `%v is not between %v and %v both excluded`
 )
 
 var (

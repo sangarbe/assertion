@@ -746,3 +746,339 @@ func (a *Assertion) LowerThanOrEqualString(value, other string, msgArgs ...inter
 
 	return ok
 }
+
+// BetweenInt64 returns true if a given int64 value is between a lower and upper
+// int64 limit values (including both)
+func (a *Assertion) BetweenInt64(value, lower, upper int64, msgArgs ...interface{}) bool {
+	for op, v := range map[int]interface{}{cmpOpGreaterEqual: lower, cmpOpLowerEqual: upper} {
+		ok, _ := compare(op, value, v, msgArgs...)
+		if !ok {
+			a.addError(buildError(fmt.Sprintf(errMsgNotBetween, value, lower, upper), msgArgs...))
+			return false
+		}
+	}
+
+	return true
+}
+
+// BetweenInt32 returns true if a given int32 value is between a lower and upper
+// int32 limit values (including both)
+func (a *Assertion) BetweenInt32(value, lower, upper int32, msgArgs ...interface{}) bool {
+	for op, v := range map[int]interface{}{cmpOpGreaterEqual: lower, cmpOpLowerEqual: upper} {
+		ok, _ := compare(op, value, v, msgArgs...)
+		if !ok {
+			a.addError(buildError(fmt.Sprintf(errMsgNotBetween, value, lower, upper), msgArgs...))
+			return false
+		}
+	}
+
+	return true
+}
+
+// BetweenInt16 returns true if a given int16 value is between a lower and upper
+// int16 limit values (including both)
+func (a *Assertion) BetweenInt16(value, lower, upper int16, msgArgs ...interface{}) bool {
+	for op, v := range map[int]interface{}{cmpOpGreaterEqual: lower, cmpOpLowerEqual: upper} {
+		ok, _ := compare(op, value, v, msgArgs...)
+		if !ok {
+			a.addError(buildError(fmt.Sprintf(errMsgNotBetween, value, lower, upper), msgArgs...))
+			return false
+		}
+	}
+
+	return true
+}
+
+// BetweenInt8 returns true if a given int8 value is between a lower and upper
+// int8 limit values (including both)
+func (a *Assertion) BetweenInt8(value, lower, upper int8, msgArgs ...interface{}) bool {
+	for op, v := range map[int]interface{}{cmpOpGreaterEqual: lower, cmpOpLowerEqual: upper} {
+		ok, _ := compare(op, value, v, msgArgs...)
+		if !ok {
+			a.addError(buildError(fmt.Sprintf(errMsgNotBetween, value, lower, upper), msgArgs...))
+			return false
+		}
+	}
+
+	return true
+}
+
+// BetweenInt returns true if a given int value is between a lower and upper
+// int limit values (including both)
+func (a *Assertion) BetweenInt(value, lower, upper int, msgArgs ...interface{}) bool {
+	for op, v := range map[int]interface{}{cmpOpGreaterEqual: lower, cmpOpLowerEqual: upper} {
+		ok, _ := compare(op, value, v, msgArgs...)
+		if !ok {
+			a.addError(buildError(fmt.Sprintf(errMsgNotBetween, value, lower, upper), msgArgs...))
+			return false
+		}
+	}
+
+	return true
+}
+
+// BetweenUint64 returns true if a given uint64 value is between a lower and upper
+// uint64 limit values (including both)
+func (a *Assertion) BetweenUint64(value, lower, upper uint64, msgArgs ...interface{}) bool {
+	for op, v := range map[int]interface{}{cmpOpGreaterEqual: lower, cmpOpLowerEqual: upper} {
+		ok, _ := compare(op, value, v, msgArgs...)
+		if !ok {
+			a.addError(buildError(fmt.Sprintf(errMsgNotBetween, value, lower, upper), msgArgs...))
+			return false
+		}
+	}
+
+	return true
+}
+
+// BetweenUint32 returns true if a given uint32 value is between a lower and upper
+// uint32 limit values (including both)
+func (a *Assertion) BetweenUint32(value, lower, upper uint32, msgArgs ...interface{}) bool {
+	for op, v := range map[int]interface{}{cmpOpGreaterEqual: lower, cmpOpLowerEqual: upper} {
+		ok, _ := compare(op, value, v, msgArgs...)
+		if !ok {
+			a.addError(buildError(fmt.Sprintf(errMsgNotBetween, value, lower, upper), msgArgs...))
+			return false
+		}
+	}
+
+	return true
+}
+
+// BetweenUint16 returns true if a given uint16 value is between a lower and upper
+// uint16 limit values (including both)
+func (a *Assertion) BetweenUint16(value, lower, upper uint16, msgArgs ...interface{}) bool {
+	for op, v := range map[int]interface{}{cmpOpGreaterEqual: lower, cmpOpLowerEqual: upper} {
+		ok, _ := compare(op, value, v, msgArgs...)
+		if !ok {
+			a.addError(buildError(fmt.Sprintf(errMsgNotBetween, value, lower, upper), msgArgs...))
+			return false
+		}
+	}
+
+	return true
+}
+
+// BetweenUint8 returns true if a given uint8 value is between a lower and upper
+// uint8 limit values (including both)
+func (a *Assertion) BetweenUint8(value, lower, upper uint8, msgArgs ...interface{}) bool {
+	for op, v := range map[int]interface{}{cmpOpGreaterEqual: lower, cmpOpLowerEqual: upper} {
+		ok, _ := compare(op, value, v, msgArgs...)
+		if !ok {
+			a.addError(buildError(fmt.Sprintf(errMsgNotBetween, value, lower, upper), msgArgs...))
+			return false
+		}
+	}
+
+	return true
+}
+
+// BetweenUint returns true if a given uint value is between a lower and upper
+// uint limit values (including both)
+func (a *Assertion) BetweenUint(value, lower, upper uint, msgArgs ...interface{}) bool {
+	for op, v := range map[int]interface{}{cmpOpGreaterEqual: lower, cmpOpLowerEqual: upper} {
+		ok, _ := compare(op, value, v, msgArgs...)
+		if !ok {
+			a.addError(buildError(fmt.Sprintf(errMsgNotBetween, value, lower, upper), msgArgs...))
+			return false
+		}
+	}
+
+	return true
+}
+
+// BetweenFloat64 returns true if a given float64 value is between a lower and upper
+// float64 limit values (including both)
+func (a *Assertion) BetweenFloat64(value, lower, upper float64, msgArgs ...interface{}) bool {
+	for op, v := range map[int]interface{}{cmpOpGreaterEqual: lower, cmpOpLowerEqual: upper} {
+		ok, _ := compare(op, value, v, msgArgs...)
+		if !ok {
+			a.addError(buildError(fmt.Sprintf(errMsgNotBetween, value, lower, upper), msgArgs...))
+			return false
+		}
+	}
+
+	return true
+}
+
+// BetweenFloat32 returns true if a given float32 value is between a lower and upper
+// float32 limit values (including both)
+func (a *Assertion) BetweenFloat32(value, lower, upper float32, msgArgs ...interface{}) bool {
+	for op, v := range map[int]interface{}{cmpOpGreaterEqual: lower, cmpOpLowerEqual: upper} {
+		ok, _ := compare(op, value, v, msgArgs...)
+		if !ok {
+			a.addError(buildError(fmt.Sprintf(errMsgNotBetween, value, lower, upper), msgArgs...))
+			return false
+		}
+	}
+
+	return true
+}
+
+// BetweenExcludeInt64 returns true if a given int64 value is between a lower and upper
+// int64 limit values (excluding both)
+func (a *Assertion) BetweenExcludeInt64(value, lower, upper int64, msgArgs ...interface{}) bool {
+	for op, v := range map[int]interface{}{cmpOpGreater: lower, cmpOpLower: upper} {
+		ok, _ := compare(op, value, v, msgArgs...)
+		if !ok {
+			a.addError(buildError(fmt.Sprintf(errMsgNotBetweenExclude, value, lower, upper), msgArgs...))
+			return false
+		}
+	}
+
+	return true
+}
+
+// BetweenExcludeInt32 returns true if a given int32 value is between a lower and upper
+// int32 limit values (excluding both)
+func (a *Assertion) BetweenExcludeInt32(value, lower, upper int32, msgArgs ...interface{}) bool {
+	for op, v := range map[int]interface{}{cmpOpGreater: lower, cmpOpLower: upper} {
+		ok, _ := compare(op, value, v, msgArgs...)
+		if !ok {
+			a.addError(buildError(fmt.Sprintf(errMsgNotBetweenExclude, value, lower, upper), msgArgs...))
+			return false
+		}
+	}
+
+	return true
+}
+
+// BetweenExcludeInt16 returns true if a given int16 value is between a lower and upper
+// int16 limit values (excluding both)
+func (a *Assertion) BetweenExcludeInt16(value, lower, upper int16, msgArgs ...interface{}) bool {
+	for op, v := range map[int]interface{}{cmpOpGreater: lower, cmpOpLower: upper} {
+		ok, _ := compare(op, value, v, msgArgs...)
+		if !ok {
+			a.addError(buildError(fmt.Sprintf(errMsgNotBetweenExclude, value, lower, upper), msgArgs...))
+			return false
+		}
+	}
+
+	return true
+}
+
+// BetweenExcludeInt8 returns true if a given int8 value is between a lower and upper
+// int8 limit values (excluding both)
+func (a *Assertion) BetweenExcludeInt8(value, lower, upper int8, msgArgs ...interface{}) bool {
+	for op, v := range map[int]interface{}{cmpOpGreater: lower, cmpOpLower: upper} {
+		ok, _ := compare(op, value, v, msgArgs...)
+		if !ok {
+			a.addError(buildError(fmt.Sprintf(errMsgNotBetweenExclude, value, lower, upper), msgArgs...))
+			return false
+		}
+	}
+
+	return true
+}
+
+// BetweenExcludeInt returns true if a given int value is between a lower and upper
+// int limit values (excluding both)
+func (a *Assertion) BetweenExcludeInt(value, lower, upper int, msgArgs ...interface{}) bool {
+	for op, v := range map[int]interface{}{cmpOpGreater: lower, cmpOpLower: upper} {
+		ok, _ := compare(op, value, v, msgArgs...)
+		if !ok {
+			a.addError(buildError(fmt.Sprintf(errMsgNotBetweenExclude, value, lower, upper), msgArgs...))
+			return false
+		}
+	}
+
+	return true
+}
+
+// BetweenExcludeUint64 returns true if a given uint64 value is between a lower and upper
+// uint64 limit values (excluding both)
+func (a *Assertion) BetweenExcludeUint64(value, lower, upper uint64, msgArgs ...interface{}) bool {
+	for op, v := range map[int]interface{}{cmpOpGreater: lower, cmpOpLower: upper} {
+		ok, _ := compare(op, value, v, msgArgs...)
+		if !ok {
+			a.addError(buildError(fmt.Sprintf(errMsgNotBetweenExclude, value, lower, upper), msgArgs...))
+			return false
+		}
+	}
+
+	return true
+}
+
+// BetweenExcludeUint32 returns true if a given uint32 value is between a lower and upper
+// uint32 limit values (excluding both)
+func (a *Assertion) BetweenExcludeUint32(value, lower, upper uint32, msgArgs ...interface{}) bool {
+	for op, v := range map[int]interface{}{cmpOpGreater: lower, cmpOpLower: upper} {
+		ok, _ := compare(op, value, v, msgArgs...)
+		if !ok {
+			a.addError(buildError(fmt.Sprintf(errMsgNotBetweenExclude, value, lower, upper), msgArgs...))
+			return false
+		}
+	}
+
+	return true
+}
+
+// BetweenExcludeUint16 returns true if a given uint16 value is between a lower and upper
+// uint16 limit values (excluding both)
+func (a *Assertion) BetweenExcludeUint16(value, lower, upper uint16, msgArgs ...interface{}) bool {
+	for op, v := range map[int]interface{}{cmpOpGreater: lower, cmpOpLower: upper} {
+		ok, _ := compare(op, value, v, msgArgs...)
+		if !ok {
+			a.addError(buildError(fmt.Sprintf(errMsgNotBetweenExclude, value, lower, upper), msgArgs...))
+			return false
+		}
+	}
+
+	return true
+}
+
+// BetweenExcludeUint8 returns true if a given uint8 value is between a lower and upper
+// uint8 limit values (excluding both)
+func (a *Assertion) BetweenExcludeUint8(value, lower, upper uint8, msgArgs ...interface{}) bool {
+	for op, v := range map[int]interface{}{cmpOpGreater: lower, cmpOpLower: upper} {
+		ok, _ := compare(op, value, v, msgArgs...)
+		if !ok {
+			a.addError(buildError(fmt.Sprintf(errMsgNotBetweenExclude, value, lower, upper), msgArgs...))
+			return false
+		}
+	}
+
+	return true
+}
+
+// BetweenExcludeUint returns true if a given uint value is between a lower and upper
+// uint limit values (excluding both)
+func (a *Assertion) BetweenExcludeUint(value, lower, upper uint, msgArgs ...interface{}) bool {
+	for op, v := range map[int]interface{}{cmpOpGreater: lower, cmpOpLower: upper} {
+		ok, _ := compare(op, value, v, msgArgs...)
+		if !ok {
+			a.addError(buildError(fmt.Sprintf(errMsgNotBetweenExclude, value, lower, upper), msgArgs...))
+			return false
+		}
+	}
+
+	return true
+}
+
+// BetweenExcludeFloat64 returns true if a given float64 value is between a lower and upper
+// float64 limit values (excluding both)
+func (a *Assertion) BetweenExcludeFloat64(value, lower, upper float64, msgArgs ...interface{}) bool {
+	for op, v := range map[int]interface{}{cmpOpGreater: lower, cmpOpLower: upper} {
+		ok, _ := compare(op, value, v, msgArgs...)
+		if !ok {
+			a.addError(buildError(fmt.Sprintf(errMsgNotBetweenExclude, value, lower, upper), msgArgs...))
+			return false
+		}
+	}
+
+	return true
+}
+
+// BetweenExcludeFloat32 returns true if a given float32 value is between a lower and upper
+// float32 limit values (excluding both)
+func (a *Assertion) BetweenExcludeFloat32(value, lower, upper float32, msgArgs ...interface{}) bool {
+	for op, v := range map[int]interface{}{cmpOpGreater: lower, cmpOpLower: upper} {
+		ok, _ := compare(op, value, v, msgArgs...)
+		if !ok {
+			a.addError(buildError(fmt.Sprintf(errMsgNotBetweenExclude, value, lower, upper), msgArgs...))
+			return false
+		}
+	}
+
+	return true
+}
