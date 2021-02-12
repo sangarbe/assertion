@@ -164,6 +164,9 @@ func assertMethodMeetsExpectations(t *testing.T, method string, params []interfa
 	in := make([]reflect.Value, len(params))
 	for k, param := range params {
 		v := reflect.ValueOf(param)
+		if !v.IsValid(){
+			v = reflect.ValueOf(((*int)(nil)))
+		}
 		if k >= f.NumIn()-1 {
 			in[k] = v
 			continue

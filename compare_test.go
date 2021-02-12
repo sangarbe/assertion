@@ -6,10 +6,16 @@ import (
 )
 
 func TestAssertion_CompareMethodsReturnOk(t *testing.T) {
+	var nilMap map[int]int
+	var nilPtr *int
+
 	data := []struct {
 		method string
 		okArgs []interface{}
 	}{
+		{"Nil", []interface{}{nil}},
+		{"Nil", []interface{}{nilPtr}},
+		{"Nil", []interface{}{nilMap}},
 		{"EqualBool", []interface{}{true, true}},
 		{"True", []interface{}{true}},
 		{"False", []interface{}{false}},
@@ -155,6 +161,11 @@ func TestAssertion_CompareMethodsReturnKo(t *testing.T) {
 		koArgs []interface{}
 		errMsg string
 	}{
+		{"Nil", []interface{}{true}, "true is not <nil>"},
+		{"Nil", []interface{}{0}, "0 is not <nil>"},
+		{"Nil", []interface{}{""}, " is not <nil>"},
+		{"Nil", []interface{}{struct {}{}}, "{} is not <nil>"},
+		{"Nil", []interface{}{' '}, "32 is not <nil>"},
 		{"EqualBool", []interface{}{true, false}, "true is not equal false"},
 		{"True", []interface{}{false}, "false is not equal true"},
 		{"False", []interface{}{true}, "true is not equal false"},

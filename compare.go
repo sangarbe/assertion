@@ -67,6 +67,25 @@ func compare(op int, value, other interface{}, msgArgs ...interface{}) (bool, er
 	return false, buildError(fmt.Sprintf(errMsgByOp[op], value, other), msgArgs...)
 }
 
+// Nil returns true if a given bool value is equal to other bool value
+func (a *Assertion) Nil(args ...interface{}) bool {
+	if args[0] == nil {
+		return true
+	}
+	v := reflect.ValueOf(args[0])
+	switch v.Kind() {
+	case reflect.Chan, reflect.Func,
+		reflect.Interface, reflect.Map,
+		reflect.Ptr, reflect.Slice:
+		if v.IsNil() {
+			return true
+		}
+	}
+
+	a.addError(buildError(fmt.Sprintf(errMsgNot, args[0], nil), args[1:]...))
+	return false
+}
+
 // EqualBool returns true if a given bool value is equal to other bool value
 func (a *Assertion) EqualBool(value, other bool, msgArgs ...interface{}) bool {
 	ok, err := compare(cmpOpEqual, value, other, msgArgs...)
