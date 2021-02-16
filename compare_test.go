@@ -1,292 +1,512 @@
 package assertion
 
 import (
-	"fmt"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
-func TestAssertion_CompareMethodsReturnOk(t *testing.T) {
-	var nilMap map[int]int
-	var nilPtr *int
-
-	data := []struct {
-		method string
-		okArgs []interface{}
-	}{
-		{"Nil", []interface{}{nil}},
-		{"Nil", []interface{}{nilPtr}},
-		{"Nil", []interface{}{nilMap}},
-		{"EqualBool", []interface{}{true, true}},
-		{"True", []interface{}{true}},
-		{"False", []interface{}{false}},
-		{"EqualInt", []interface{}{1, 1}},
-		{"EqualInt8", []interface{}{1, 1}},
-		{"EqualInt16", []interface{}{1, 1}},
-		{"EqualInt32", []interface{}{1, 1}},
-		{"EqualInt64", []interface{}{1, 1}},
-		{"EqualUint", []interface{}{1, 1}},
-		{"EqualUint8", []interface{}{1, 1}},
-		{"EqualUint16", []interface{}{1, 1}},
-		{"EqualUint32", []interface{}{1, 1}},
-		{"EqualUint64", []interface{}{1, 1}},
-		{"EqualFloat32", []interface{}{1.5, 1.5}},
-		{"EqualFloat64", []interface{}{1.5, 1.5}},
-		{"EqualString", []interface{}{"a", "a"}},
-		{"GreaterThanInt64", []interface{}{1, 0}},
-		{"GreaterThanInt32", []interface{}{1, 0}},
-		{"GreaterThanInt16", []interface{}{1, 0}},
-		{"GreaterThanInt8", []interface{}{1, 0}},
-		{"GreaterThanInt", []interface{}{1, 0}},
-		{"GreaterThanUint64", []interface{}{1, 0}},
-		{"GreaterThanUint32", []interface{}{1, 0}},
-		{"GreaterThanUint16", []interface{}{1, 0}},
-		{"GreaterThanUint8", []interface{}{1, 0}},
-		{"GreaterThanUint", []interface{}{1, 0}},
-		{"GreaterThanFloat64", []interface{}{1, 0}},
-		{"GreaterThanFloat32", []interface{}{1, 0}},
-		{"GreaterThanString", []interface{}{"b", "a"}},
-		{"LowerThanInt64", []interface{}{0, 1}},
-		{"LowerThanInt32", []interface{}{0, 1}},
-		{"LowerThanInt16", []interface{}{0, 1}},
-		{"LowerThanInt8", []interface{}{0, 1}},
-		{"LowerThanInt", []interface{}{0, 1}},
-		{"LowerThanUint64", []interface{}{0, 1}},
-		{"LowerThanUint32", []interface{}{0, 1}},
-		{"LowerThanUint16", []interface{}{0, 1}},
-		{"LowerThanUint8", []interface{}{0, 1}},
-		{"LowerThanUint", []interface{}{0, 1}},
-		{"LowerThanFloat64", []interface{}{0, 1}},
-		{"LowerThanFloat32", []interface{}{0, 1}},
-		{"LowerThanString", []interface{}{"a", "b"}},
-		{"GreaterThanOrEqualInt64", []interface{}{1, 0}},
-		{"GreaterThanOrEqualInt64", []interface{}{0, 0}},
-		{"GreaterThanOrEqualInt32", []interface{}{1, 0}},
-		{"GreaterThanOrEqualInt32", []interface{}{0, 0}},
-		{"GreaterThanOrEqualInt16", []interface{}{1, 0}},
-		{"GreaterThanOrEqualInt16", []interface{}{0, 0}},
-		{"GreaterThanOrEqualInt8", []interface{}{1, 0}},
-		{"GreaterThanOrEqualInt8", []interface{}{0, 0}},
-		{"GreaterThanOrEqualInt", []interface{}{1, 0}},
-		{"GreaterThanOrEqualInt", []interface{}{0, 0}},
-		{"GreaterThanOrEqualUint64", []interface{}{1, 0}},
-		{"GreaterThanOrEqualUint64", []interface{}{0, 0}},
-		{"GreaterThanOrEqualUint32", []interface{}{1, 0}},
-		{"GreaterThanOrEqualUint32", []interface{}{0, 0}},
-		{"GreaterThanOrEqualUint16", []interface{}{1, 0}},
-		{"GreaterThanOrEqualUint16", []interface{}{0, 0}},
-		{"GreaterThanOrEqualUint8", []interface{}{1, 0}},
-		{"GreaterThanOrEqualUint8", []interface{}{0, 0}},
-		{"GreaterThanOrEqualUint", []interface{}{1, 0}},
-		{"GreaterThanOrEqualUint", []interface{}{0, 0}},
-		{"GreaterThanOrEqualFloat64", []interface{}{1, 0}},
-		{"GreaterThanOrEqualFloat64", []interface{}{0, 0}},
-		{"GreaterThanOrEqualFloat32", []interface{}{1, 0}},
-		{"GreaterThanOrEqualFloat32", []interface{}{0, 0}},
-		{"GreaterThanOrEqualString", []interface{}{"b", "a"}},
-		{"GreaterThanOrEqualString", []interface{}{"a", "a"}},
-		{"LowerThanOrEqualInt64", []interface{}{0, 1}},
-		{"LowerThanOrEqualInt64", []interface{}{1, 1}},
-		{"LowerThanOrEqualInt32", []interface{}{0, 1}},
-		{"LowerThanOrEqualInt32", []interface{}{1, 1}},
-		{"LowerThanOrEqualInt16", []interface{}{0, 1}},
-		{"LowerThanOrEqualInt16", []interface{}{1, 1}},
-		{"LowerThanOrEqualInt8", []interface{}{0, 1}},
-		{"LowerThanOrEqualInt8", []interface{}{1, 1}},
-		{"LowerThanOrEqualInt", []interface{}{0, 1}},
-		{"LowerThanOrEqualInt", []interface{}{1, 1}},
-		{"LowerThanOrEqualUint64", []interface{}{0, 1}},
-		{"LowerThanOrEqualUint64", []interface{}{1, 1}},
-		{"LowerThanOrEqualUint32", []interface{}{0, 1}},
-		{"LowerThanOrEqualUint32", []interface{}{1, 1}},
-		{"LowerThanOrEqualUint16", []interface{}{0, 1}},
-		{"LowerThanOrEqualUint16", []interface{}{1, 1}},
-		{"LowerThanOrEqualUint8", []interface{}{0, 1}},
-		{"LowerThanOrEqualUint8", []interface{}{1, 1}},
-		{"LowerThanOrEqualUint", []interface{}{0, 1}},
-		{"LowerThanOrEqualUint", []interface{}{1, 1}},
-		{"LowerThanOrEqualFloat64", []interface{}{0, 1}},
-		{"LowerThanOrEqualFloat64", []interface{}{1, 1}},
-		{"LowerThanOrEqualFloat32", []interface{}{0, 1}},
-		{"LowerThanOrEqualFloat32", []interface{}{1, 1}},
-		{"LowerThanOrEqualString", []interface{}{"a", "b"}},
-		{"LowerThanOrEqualString", []interface{}{"a", "a"}},
-		{"BetweenInt64", []interface{}{0, 0, 1}},
-		{"BetweenInt64", []interface{}{1, 0, 1}},
-		{"BetweenInt32", []interface{}{0, 0, 1}},
-		{"BetweenInt32", []interface{}{1, 0, 1}},
-		{"BetweenInt16", []interface{}{0, 0, 1}},
-		{"BetweenInt16", []interface{}{1, 0, 1}},
-		{"BetweenInt8", []interface{}{0, 0, 1}},
-		{"BetweenInt8", []interface{}{1, 0, 1}},
-		{"BetweenInt", []interface{}{0, 0, 1}},
-		{"BetweenInt", []interface{}{1, 0, 1}},
-		{"BetweenUint64", []interface{}{0, 0, 1}},
-		{"BetweenUint64", []interface{}{1, 0, 1}},
-		{"BetweenUint32", []interface{}{0, 0, 1}},
-		{"BetweenUint32", []interface{}{1, 0, 1}},
-		{"BetweenUint16", []interface{}{0, 0, 1}},
-		{"BetweenUint16", []interface{}{1, 0, 1}},
-		{"BetweenUint8", []interface{}{0, 0, 1}},
-		{"BetweenUint8", []interface{}{1, 0, 1}},
-		{"BetweenUint", []interface{}{0, 0, 1}},
-		{"BetweenUint", []interface{}{1, 0, 1}},
-		{"BetweenFloat64", []interface{}{0, 0, 1}},
-		{"BetweenFloat64", []interface{}{1, 0, 1}},
-		{"BetweenFloat32", []interface{}{0, 0, 1}},
-		{"BetweenFloat32", []interface{}{1, 0, 1}},
-		{"BetweenExcludeInt64", []interface{}{1, 0, 2}},
-		{"BetweenExcludeInt32", []interface{}{1, 0, 2}},
-		{"BetweenExcludeInt16", []interface{}{1, 0, 2}},
-		{"BetweenExcludeInt8", []interface{}{1, 0, 2}},
-		{"BetweenExcludeInt", []interface{}{1, 0, 2}},
-		{"BetweenExcludeUint64", []interface{}{1, 0, 2}},
-		{"BetweenExcludeUint32", []interface{}{1, 0, 2}},
-		{"BetweenExcludeUint16", []interface{}{1, 0, 2}},
-		{"BetweenExcludeUint8", []interface{}{1, 0, 2}},
-		{"BetweenExcludeUint", []interface{}{1, 0, 2}},
-		{"BetweenExcludeFloat64", []interface{}{1, 0, 2}},
-		{"BetweenExcludeFloat32", []interface{}{1, 0, 2}},
-	}
-
-	for _, i := range data {
-		t.Run(fmt.Sprintf("%s %v", i.method, i.okArgs), func(t *testing.T) {
-			assertMethodReturnsOk(t, i.method, i.okArgs)
-		})
-	}
+type MethodDataOK struct {
+	method string
+	okArgs []interface{}
 }
 
-func TestAssertion_CompareMethodsReturnKo(t *testing.T) {
-	data := []struct {
-		method string
-		koArgs []interface{}
-		errMsg string
-	}{
+type MethodDataKO struct {
+	method string
+	koArgs []interface{}
+	errMsg string
+}
+
+func TestAssertion_Nil_ReturnsTrue(t *testing.T) {
+	var (
+		nilPtr *int
+		nilSlc []int
+		nilMap map[int]int
+		nilChn chan int
+		nilFun func()
+		nilItf interface{}
+	)
+
+	data := []MethodDataOK{
+		{"Nil", []interface{}{nilPtr}},
+		{"Nil", []interface{}{nilMap}},
+		{"Nil", []interface{}{nilChn}},
+		{"Nil", []interface{}{nilFun}},
+		{"Nil", []interface{}{nilSlc}},
+		{"Nil", []interface{}{nilItf}},
+	}
+
+	assertAllReturnsTrue(t, data)
+
+	a := New()
+	assert.True(t, a.Nil(nil))
+}
+
+func TestAssertion_Nil_ReturnsFalse(t *testing.T) {
+	data := []MethodDataKO{
 		{"Nil", []interface{}{true}, "true is not <nil>"},
 		{"Nil", []interface{}{0}, "0 is not <nil>"},
 		{"Nil", []interface{}{""}, " is not <nil>"},
-		{"Nil", []interface{}{struct {}{}}, "{} is not <nil>"},
+		{"Nil", []interface{}{struct{}{}}, "{} is not <nil>"},
 		{"Nil", []interface{}{' '}, "32 is not <nil>"},
-		{"EqualBool", []interface{}{true, false}, "true is not equal false"},
-		{"True", []interface{}{false}, "false is not equal true"},
-		{"False", []interface{}{true}, "true is not equal false"},
-		{"EqualInt", []interface{}{1, 0}, "1 is not equal 0"},
-		{"EqualInt8", []interface{}{1, 0}, "1 is not equal 0"},
-		{"EqualInt16", []interface{}{1, 0}, "1 is not equal 0"},
-		{"EqualInt32", []interface{}{1, 0}, "1 is not equal 0"},
-		{"EqualInt64", []interface{}{1, 0}, "1 is not equal 0"},
-		{"EqualUint", []interface{}{1, 0}, "1 is not equal 0"},
-		{"EqualUint8", []interface{}{1, 0}, "1 is not equal 0"},
-		{"EqualUint16", []interface{}{1, 0}, "1 is not equal 0"},
-		{"EqualUint32", []interface{}{1, 0}, "1 is not equal 0"},
-		{"EqualUint64", []interface{}{1, 0}, "1 is not equal 0"},
-		{"EqualFloat32", []interface{}{1.5, 0.5}, "1.5 is not equal 0.5"},
-		{"EqualFloat64", []interface{}{1.5, 0.5}, "1.5 is not equal 0.5"},
-		{"EqualString", []interface{}{"a", "b"}, "a is not equal b"},
-		{"GreaterThanInt", []interface{}{1, 1}, "1 is not greater than 1"},
-		{"GreaterThanInt8", []interface{}{1, 1}, "1 is not greater than 1"},
-		{"GreaterThanInt16", []interface{}{1, 1}, "1 is not greater than 1"},
-		{"GreaterThanInt32", []interface{}{1, 1}, "1 is not greater than 1"},
-		{"GreaterThanInt64", []interface{}{1, 1}, "1 is not greater than 1"},
-		{"GreaterThanUint", []interface{}{1, 1}, "1 is not greater than 1"},
-		{"GreaterThanUint8", []interface{}{1, 1}, "1 is not greater than 1"},
-		{"GreaterThanUint16", []interface{}{1, 1}, "1 is not greater than 1"},
-		{"GreaterThanUint32", []interface{}{1, 1}, "1 is not greater than 1"},
-		{"GreaterThanUint64", []interface{}{1, 1}, "1 is not greater than 1"},
-		{"GreaterThanFloat32", []interface{}{1, 1}, "1 is not greater than 1"},
-		{"GreaterThanFloat64", []interface{}{1, 1}, "1 is not greater than 1"},
-		{"GreaterThanString", []interface{}{"a", "b"}, "a is not greater than b"},
-		{"LowerThanInt", []interface{}{1, 1}, "1 is not lower than 1"},
-		{"LowerThanInt8", []interface{}{1, 1}, "1 is not lower than 1"},
-		{"LowerThanInt16", []interface{}{1, 1}, "1 is not lower than 1"},
-		{"LowerThanInt32", []interface{}{1, 1}, "1 is not lower than 1"},
-		{"LowerThanInt64", []interface{}{1, 1}, "1 is not lower than 1"},
-		{"LowerThanUint", []interface{}{1, 1}, "1 is not lower than 1"},
-		{"LowerThanUint8", []interface{}{1, 1}, "1 is not lower than 1"},
-		{"LowerThanUint16", []interface{}{1, 1}, "1 is not lower than 1"},
-		{"LowerThanUint32", []interface{}{1, 1}, "1 is not lower than 1"},
-		{"LowerThanUint64", []interface{}{1, 1}, "1 is not lower than 1"},
-		{"LowerThanFloat32", []interface{}{1, 1}, "1 is not lower than 1"},
-		{"LowerThanFloat64", []interface{}{1, 1}, "1 is not lower than 1"},
-		{"LowerThanString", []interface{}{"a", "a"}, "a is not lower than a"},
-		{"GreaterThanOrEqualInt", []interface{}{0, 1}, "0 is not greater than or equal 1"},
-		{"GreaterThanOrEqualInt8", []interface{}{0, 1}, "0 is not greater than or equal 1"},
-		{"GreaterThanOrEqualInt16", []interface{}{0, 1}, "0 is not greater than or equal 1"},
-		{"GreaterThanOrEqualInt32", []interface{}{0, 1}, "0 is not greater than or equal 1"},
-		{"GreaterThanOrEqualInt64", []interface{}{0, 1}, "0 is not greater than or equal 1"},
-		{"GreaterThanOrEqualUint", []interface{}{0, 1}, "0 is not greater than or equal 1"},
-		{"GreaterThanOrEqualUint8", []interface{}{0, 1}, "0 is not greater than or equal 1"},
-		{"GreaterThanOrEqualUint16", []interface{}{0, 1}, "0 is not greater than or equal 1"},
-		{"GreaterThanOrEqualUint32", []interface{}{0, 1}, "0 is not greater than or equal 1"},
-		{"GreaterThanOrEqualUint64", []interface{}{0, 1}, "0 is not greater than or equal 1"},
-		{"GreaterThanOrEqualFloat32", []interface{}{0, 1}, "0 is not greater than or equal 1"},
-		{"GreaterThanOrEqualFloat64", []interface{}{0, 1}, "0 is not greater than or equal 1"},
-		{"GreaterThanOrEqualString", []interface{}{"a", "b"}, "a is not greater than or equal b"},
-		{"LowerThanOrEqualInt", []interface{}{1, 0}, "1 is not lower than or equal 0"},
-		{"LowerThanOrEqualInt8", []interface{}{1, 0}, "1 is not lower than or equal 0"},
-		{"LowerThanOrEqualInt16", []interface{}{1, 0}, "1 is not lower than or equal 0"},
-		{"LowerThanOrEqualInt32", []interface{}{1, 0}, "1 is not lower than or equal 0"},
-		{"LowerThanOrEqualInt64", []interface{}{1, 0}, "1 is not lower than or equal 0"},
-		{"LowerThanOrEqualUint", []interface{}{1, 0}, "1 is not lower than or equal 0"},
-		{"LowerThanOrEqualUint8", []interface{}{1, 0}, "1 is not lower than or equal 0"},
-		{"LowerThanOrEqualUint16", []interface{}{1, 0}, "1 is not lower than or equal 0"},
-		{"LowerThanOrEqualUint32", []interface{}{1, 0}, "1 is not lower than or equal 0"},
-		{"LowerThanOrEqualUint64", []interface{}{1, 0}, "1 is not lower than or equal 0"},
-		{"LowerThanOrEqualFloat32", []interface{}{1, 0}, "1 is not lower than or equal 0"},
-		{"LowerThanOrEqualFloat64", []interface{}{1, 0}, "1 is not lower than or equal 0"},
-		{"LowerThanOrEqualString", []interface{}{"b", "a"}, "b is not lower than or equal a"},
-		{"BetweenInt", []interface{}{1, 0, 0}, "1 is not between 0 and 0"},
-		{"BetweenInt8", []interface{}{1, 0, 0}, "1 is not between 0 and 0"},
-		{"BetweenInt16", []interface{}{1, 0, 0}, "1 is not between 0 and 0"},
-		{"BetweenInt32", []interface{}{1, 0, 0}, "1 is not between 0 and 0"},
-		{"BetweenInt64", []interface{}{1, 0, 0}, "1 is not between 0 and 0"},
-		{"BetweenUint", []interface{}{1, 0, 0}, "1 is not between 0 and 0"},
-		{"BetweenUint8", []interface{}{1, 0, 0}, "1 is not between 0 and 0"},
-		{"BetweenUint16", []interface{}{1, 0, 0}, "1 is not between 0 and 0"},
-		{"BetweenUint32", []interface{}{1, 0, 0}, "1 is not between 0 and 0"},
-		{"BetweenUint64", []interface{}{1, 0, 0}, "1 is not between 0 and 0"},
-		{"BetweenFloat32", []interface{}{1, 0, 0}, "1 is not between 0 and 0"},
-		{"BetweenFloat64", []interface{}{1, 0, 0}, "1 is not between 0 and 0"},
-		{"BetweenInt", []interface{}{0, 1, 1}, "0 is not between 1 and 1"},
-		{"BetweenInt8", []interface{}{0, 1, 1}, "0 is not between 1 and 1"},
-		{"BetweenInt16", []interface{}{0, 1, 1}, "0 is not between 1 and 1"},
-		{"BetweenInt32", []interface{}{0, 1, 1}, "0 is not between 1 and 1"},
-		{"BetweenInt64", []interface{}{0, 1, 1}, "0 is not between 1 and 1"},
-		{"BetweenUint", []interface{}{0, 1, 1}, "0 is not between 1 and 1"},
-		{"BetweenUint8", []interface{}{0, 1, 1}, "0 is not between 1 and 1"},
-		{"BetweenUint16", []interface{}{0, 1, 1}, "0 is not between 1 and 1"},
-		{"BetweenUint32", []interface{}{0, 1, 1}, "0 is not between 1 and 1"},
-		{"BetweenUint64", []interface{}{0, 1, 1}, "0 is not between 1 and 1"},
-		{"BetweenFloat32", []interface{}{0, 1, 1}, "0 is not between 1 and 1"},
-		{"BetweenFloat64", []interface{}{0, 1, 1}, "0 is not between 1 and 1"},
-		{"BetweenExcludeInt", []interface{}{1, 0, 1}, "1 is not between 0 and 1 both excluded"},
-		{"BetweenExcludeInt8", []interface{}{1, 0, 1}, "1 is not between 0 and 1 both excluded"},
-		{"BetweenExcludeInt16", []interface{}{1, 0, 1}, "1 is not between 0 and 1 both excluded"},
-		{"BetweenExcludeInt32", []interface{}{1, 0, 1}, "1 is not between 0 and 1 both excluded"},
-		{"BetweenExcludeInt64", []interface{}{1, 0, 1}, "1 is not between 0 and 1 both excluded"},
-		{"BetweenExcludeUint", []interface{}{1, 0, 1}, "1 is not between 0 and 1 both excluded"},
-		{"BetweenExcludeUint8", []interface{}{1, 0, 1}, "1 is not between 0 and 1 both excluded"},
-		{"BetweenExcludeUint16", []interface{}{1, 0, 1}, "1 is not between 0 and 1 both excluded"},
-		{"BetweenExcludeUint32", []interface{}{1, 0, 1}, "1 is not between 0 and 1 both excluded"},
-		{"BetweenExcludeUint64", []interface{}{1, 0, 1}, "1 is not between 0 and 1 both excluded"},
-		{"BetweenExcludeFloat32", []interface{}{1, 0, 1}, "1 is not between 0 and 1 both excluded"},
-		{"BetweenExcludeFloat64", []interface{}{1, 0, 1}, "1 is not between 0 and 1 both excluded"},
-		{"BetweenExcludeInt", []interface{}{0, 0, 1}, "0 is not between 0 and 1 both excluded"},
-		{"BetweenExcludeInt8", []interface{}{0, 0, 1}, "0 is not between 0 and 1 both excluded"},
-		{"BetweenExcludeInt16", []interface{}{0, 0, 1}, "0 is not between 0 and 1 both excluded"},
-		{"BetweenExcludeInt32", []interface{}{0, 0, 1}, "0 is not between 0 and 1 both excluded"},
-		{"BetweenExcludeInt64", []interface{}{0, 0, 1}, "0 is not between 0 and 1 both excluded"},
-		{"BetweenExcludeUint", []interface{}{0, 0, 1}, "0 is not between 0 and 1 both excluded"},
-		{"BetweenExcludeUint8", []interface{}{0, 0, 1}, "0 is not between 0 and 1 both excluded"},
-		{"BetweenExcludeUint16", []interface{}{0, 0, 1}, "0 is not between 0 and 1 both excluded"},
-		{"BetweenExcludeUint32", []interface{}{0, 0, 1}, "0 is not between 0 and 1 both excluded"},
-		{"BetweenExcludeUint64", []interface{}{0, 0, 1}, "0 is not between 0 and 1 both excluded"},
-		{"BetweenExcludeFloat32", []interface{}{0, 0, 1}, "0 is not between 0 and 1 both excluded"},
-		{"BetweenExcludeFloat64", []interface{}{0, 0, 1}, "0 is not between 0 and 1 both excluded"},
 	}
 
-	for _, i := range data {
-		t.Run(fmt.Sprintf("%s %v", i.method, i.koArgs), func(t *testing.T) {
-			assertMethodReturnsKo(t, i.method, i.koArgs, i.errMsg)
-		})
+	assertAllReturnsFalse(t, data)
+}
+
+func TestAssertion_Equal_ReturnsTrue(t *testing.T) {
+	data := []MethodDataOK{
+		{"Equal", []interface{}{true, true}},
+		{"Equal", []interface{}{false, false}},
+		{"Equal", []interface{}{int64(1), int64(1)}},
+		{"Equal", []interface{}{int32(1), int32(1)}},
+		{"Equal", []interface{}{int16(1), int16(1)}},
+		{"Equal", []interface{}{int8(1), int8(1)}},
+		{"Equal", []interface{}{1, 1}},
+		{"Equal", []interface{}{uint64(1), uint64(1)}},
+		{"Equal", []interface{}{uint32(1), uint32(1)}},
+		{"Equal", []interface{}{uint16(1), uint16(1)}},
+		{"Equal", []interface{}{uint8(1), uint8(1)}},
+		{"Equal", []interface{}{uint(1), uint(1)}},
+		{"Equal", []interface{}{float32(1.5), float32(1.5)}},
+		{"Equal", []interface{}{float64(1.5), float64(1.5)}},
+		{"Equal", []interface{}{"a", "a"}},
 	}
+
+	assertAllReturnsTrue(t, data)
+}
+
+func TestAssertion_Equal_ReturnsFalse(t *testing.T) {
+	data := []MethodDataKO{
+		{"Equal", []interface{}{true, false}, "true is not equal false"},
+		{"Equal", []interface{}{int64(1), int64(0)}, "1 is not equal 0"},
+		{"Equal", []interface{}{int32(1), int32(0)}, "1 is not equal 0"},
+		{"Equal", []interface{}{int16(1), int16(0)}, "1 is not equal 0"},
+		{"Equal", []interface{}{int8(1), int8(0)}, "1 is not equal 0"},
+		{"Equal", []interface{}{1, 0}, "1 is not equal 0"},
+		{"Equal", []interface{}{uint64(1), uint64(0)}, "1 is not equal 0"},
+		{"Equal", []interface{}{uint32(1), uint32(0)}, "1 is not equal 0"},
+		{"Equal", []interface{}{uint16(1), uint16(0)}, "1 is not equal 0"},
+		{"Equal", []interface{}{uint8(1), uint8(0)}, "1 is not equal 0"},
+		{"Equal", []interface{}{uint(1), uint(0)}, "1 is not equal 0"},
+		{"Equal", []interface{}{float32(1.5), float32(0.5)}, "1.5 is not equal 0.5"},
+		{"Equal", []interface{}{float64(1.5), float64(0.5)}, "1.5 is not equal 0.5"},
+		{"Equal", []interface{}{"a", "b"}, "a is not equal b"},
+		{"Equal", []interface{}{"a", 1}, "a and 1 are not of the same type"},
+	}
+
+	assertAllReturnsFalse(t, data)
+}
+
+func TestAssertion_True_ReturnsTrue(t *testing.T) {
+	data := []MethodDataOK{
+		{"True", []interface{}{true}},
+	}
+
+	assertAllReturnsTrue(t, data)
+}
+
+func TestAssertion_True_ReturnsFalse(t *testing.T) {
+	data := []MethodDataKO{
+		{"True", []interface{}{false}, "false is not equal true"},
+	}
+
+	assertAllReturnsFalse(t, data)
+}
+
+func TestAssertion_False_ReturnsTrue(t *testing.T) {
+	data := []MethodDataOK{
+		{"False", []interface{}{false}},
+	}
+
+	assertAllReturnsTrue(t, data)
+}
+
+func TestAssertion_False_ReturnsFalse(t *testing.T) {
+	data := []MethodDataKO{
+		{"False", []interface{}{true}, "true is not equal false"},
+	}
+
+	assertAllReturnsFalse(t, data)
+}
+
+func TestAssertion_GreaterThan_ReturnsTrue(t *testing.T) {
+	data := []MethodDataOK{
+		{"GreaterThan", []interface{}{1, 0}},
+		{"GreaterThan", []interface{}{int64(1), int64(0)}},
+		{"GreaterThan", []interface{}{int32(1), int32(0)}},
+		{"GreaterThan", []interface{}{int16(1), int16(0)}},
+		{"GreaterThan", []interface{}{int8(1), int8(0)}},
+		{"GreaterThan", []interface{}{uint64(1), uint64(0)}},
+		{"GreaterThan", []interface{}{uint32(1), uint32(0)}},
+		{"GreaterThan", []interface{}{uint16(1), uint16(0)}},
+		{"GreaterThan", []interface{}{uint8(1), uint8(0)}},
+		{"GreaterThan", []interface{}{uint(1), uint(0)}},
+		{"GreaterThan", []interface{}{float32(1), float32(0)}},
+		{"GreaterThan", []interface{}{float64(1), float64(0)}},
+		{"GreaterThan", []interface{}{"b", "a"}},
+	}
+
+	assertAllReturnsTrue(t, data)
+}
+
+func TestAssertion_GreaterThan_ReturnsFalse(t *testing.T) {
+	data := []MethodDataKO{
+		{"GreaterThan", []interface{}{1, 1}, "1 is not greater than 1"},
+		{"GreaterThan", []interface{}{int64(1), int64(1)}, "1 is not greater than 1"},
+		{"GreaterThan", []interface{}{int32(1), int32(1)}, "1 is not greater than 1"},
+		{"GreaterThan", []interface{}{int16(1), int16(1)}, "1 is not greater than 1"},
+		{"GreaterThan", []interface{}{int8(1), int8(1)}, "1 is not greater than 1"},
+		{"GreaterThan", []interface{}{uint64(1), uint64(1)}, "1 is not greater than 1"},
+		{"GreaterThan", []interface{}{uint32(1), uint32(1)}, "1 is not greater than 1"},
+		{"GreaterThan", []interface{}{uint16(1), uint16(1)}, "1 is not greater than 1"},
+		{"GreaterThan", []interface{}{uint8(1), uint8(1)}, "1 is not greater than 1"},
+		{"GreaterThan", []interface{}{uint(1), uint(1)}, "1 is not greater than 1"},
+		{"GreaterThan", []interface{}{float32(1), float32(1)}, "1 is not greater than 1"},
+		{"GreaterThan", []interface{}{float64(1), float64(1)}, "1 is not greater than 1"},
+		{"GreaterThan", []interface{}{0, 1}, "0 is not greater than 1"},
+		{"GreaterThan", []interface{}{int64(0), int64(1)}, "0 is not greater than 1"},
+		{"GreaterThan", []interface{}{int32(0), int32(1)}, "0 is not greater than 1"},
+		{"GreaterThan", []interface{}{int16(0), int16(1)}, "0 is not greater than 1"},
+		{"GreaterThan", []interface{}{int8(0), int8(1)}, "0 is not greater than 1"},
+		{"GreaterThan", []interface{}{uint64(0), uint64(1)}, "0 is not greater than 1"},
+		{"GreaterThan", []interface{}{uint32(0), uint32(1)}, "0 is not greater than 1"},
+		{"GreaterThan", []interface{}{uint16(0), uint16(1)}, "0 is not greater than 1"},
+		{"GreaterThan", []interface{}{uint8(0), uint8(1)}, "0 is not greater than 1"},
+		{"GreaterThan", []interface{}{uint(0), uint(1)}, "0 is not greater than 1"},
+		{"GreaterThan", []interface{}{float32(0), float32(1)}, "0 is not greater than 1"},
+		{"GreaterThan", []interface{}{float64(0), float64(1)}, "0 is not greater than 1"},
+		{"GreaterThan", []interface{}{"a", "a"}, "a is not greater than a"},
+		{"GreaterThan", []interface{}{"a", "b"}, "a is not greater than b"},
+		{"GreaterThan", []interface{}{"a", 1}, "a and 1 are not of the same type"},
+	}
+
+	assertAllReturnsFalse(t, data)
+}
+
+func TestAssertion_LowerThan_ReturnsTrue(t *testing.T) {
+	data := []MethodDataOK{
+		{"LowerThan", []interface{}{0, 1}},
+		{"LowerThan", []interface{}{int64(0), int64(1)}},
+		{"LowerThan", []interface{}{int32(0), int32(1)}},
+		{"LowerThan", []interface{}{int16(0), int16(1)}},
+		{"LowerThan", []interface{}{int8(0), int8(1)}},
+		{"LowerThan", []interface{}{uint64(0), uint64(1)}},
+		{"LowerThan", []interface{}{uint32(0), uint32(1)}},
+		{"LowerThan", []interface{}{uint16(0), uint16(1)}},
+		{"LowerThan", []interface{}{uint8(0), uint8(1)}},
+		{"LowerThan", []interface{}{uint(0), uint(1)}},
+		{"LowerThan", []interface{}{float32(0), float32(1)}},
+		{"LowerThan", []interface{}{float64(0), float64(1)}},
+		{"LowerThan", []interface{}{"a", "b"}},
+	}
+
+	assertAllReturnsTrue(t, data)
+}
+
+func TestAssertion_LowerThan_ReturnsFalse(t *testing.T) {
+	data := []MethodDataKO{
+		{"LowerThan", []interface{}{1, 1}, "1 is not lower than 1"},
+		{"LowerThan", []interface{}{int64(1), int64(1)}, "1 is not lower than 1"},
+		{"LowerThan", []interface{}{int32(1), int32(1)}, "1 is not lower than 1"},
+		{"LowerThan", []interface{}{int16(1), int16(1)}, "1 is not lower than 1"},
+		{"LowerThan", []interface{}{int8(1), int8(1)}, "1 is not lower than 1"},
+		{"LowerThan", []interface{}{uint64(1), uint64(1)}, "1 is not lower than 1"},
+		{"LowerThan", []interface{}{uint32(1), uint32(1)}, "1 is not lower than 1"},
+		{"LowerThan", []interface{}{uint16(1), uint16(1)}, "1 is not lower than 1"},
+		{"LowerThan", []interface{}{uint8(1), uint8(1)}, "1 is not lower than 1"},
+		{"LowerThan", []interface{}{uint(1), uint(1)}, "1 is not lower than 1"},
+		{"LowerThan", []interface{}{float32(1), float32(1)}, "1 is not lower than 1"},
+		{"LowerThan", []interface{}{float64(1), float64(1)}, "1 is not lower than 1"},
+		{"LowerThan", []interface{}{1, 0}, "1 is not lower than 0"},
+		{"LowerThan", []interface{}{int64(1), int64(0)}, "1 is not lower than 0"},
+		{"LowerThan", []interface{}{int32(1), int32(0)}, "1 is not lower than 0"},
+		{"LowerThan", []interface{}{int16(1), int16(0)}, "1 is not lower than 0"},
+		{"LowerThan", []interface{}{int8(1), int8(0)}, "1 is not lower than 0"},
+		{"LowerThan", []interface{}{uint64(1), uint64(0)}, "1 is not lower than 0"},
+		{"LowerThan", []interface{}{uint32(1), uint32(0)}, "1 is not lower than 0"},
+		{"LowerThan", []interface{}{uint16(1), uint16(0)}, "1 is not lower than 0"},
+		{"LowerThan", []interface{}{uint8(1), uint8(0)}, "1 is not lower than 0"},
+		{"LowerThan", []interface{}{uint(1), uint(0)}, "1 is not lower than 0"},
+		{"LowerThan", []interface{}{float32(1), float32(0)}, "1 is not lower than 0"},
+		{"LowerThan", []interface{}{float64(1), float64(0)}, "1 is not lower than 0"},
+		{"LowerThan", []interface{}{"a", "a"}, "a is not lower than a"},
+		{"LowerThan", []interface{}{"b", "a"}, "b is not lower than a"},
+		{"LowerThan", []interface{}{"a", 1}, "a and 1 are not of the same type"},
+	}
+
+	assertAllReturnsFalse(t, data)
+}
+
+func TestAssertion_GreaterThanOrEqual_ReturnsTrue(t *testing.T) {
+	data := []MethodDataOK{
+		{"GreaterThanOrEqual", []interface{}{1, 0}},
+		{"GreaterThanOrEqual", []interface{}{int64(1), int64(0)}},
+		{"GreaterThanOrEqual", []interface{}{int32(1), int32(0)}},
+		{"GreaterThanOrEqual", []interface{}{int16(1), int16(0)}},
+		{"GreaterThanOrEqual", []interface{}{int8(1), int8(0)}},
+		{"GreaterThanOrEqual", []interface{}{uint64(1), uint64(0)}},
+		{"GreaterThanOrEqual", []interface{}{uint32(1), uint32(0)}},
+		{"GreaterThanOrEqual", []interface{}{uint16(1), uint16(0)}},
+		{"GreaterThanOrEqual", []interface{}{uint8(1), uint8(0)}},
+		{"GreaterThanOrEqual", []interface{}{uint(1), uint(0)}},
+		{"GreaterThanOrEqual", []interface{}{float32(1), float32(0)}},
+		{"GreaterThanOrEqual", []interface{}{float64(1), float64(0)}},
+		{"GreaterThanOrEqual", []interface{}{"b", "a"}},
+		{"GreaterThanOrEqual", []interface{}{1, 1}},
+		{"GreaterThanOrEqual", []interface{}{int64(1), int64(1)}},
+		{"GreaterThanOrEqual", []interface{}{int32(1), int32(1)}},
+		{"GreaterThanOrEqual", []interface{}{int16(1), int16(1)}},
+		{"GreaterThanOrEqual", []interface{}{int8(1), int8(1)}},
+		{"GreaterThanOrEqual", []interface{}{uint64(1), uint64(1)}},
+		{"GreaterThanOrEqual", []interface{}{uint32(1), uint32(1)}},
+		{"GreaterThanOrEqual", []interface{}{uint16(1), uint16(1)}},
+		{"GreaterThanOrEqual", []interface{}{uint8(1), uint8(1)}},
+		{"GreaterThanOrEqual", []interface{}{uint(1), uint(1)}},
+		{"GreaterThanOrEqual", []interface{}{float32(1), float32(1)}},
+		{"GreaterThanOrEqual", []interface{}{float64(1), float64(1)}},
+		{"GreaterThanOrEqual", []interface{}{"a", "a"}},
+	}
+
+	assertAllReturnsTrue(t, data)
+}
+
+func TestAssertion_GreaterThanOrEqual_ReturnsFalse(t *testing.T) {
+	data := []MethodDataKO{
+		{"GreaterThanOrEqual", []interface{}{0, 1}, "0 is not greater than or equal 1"},
+		{"GreaterThanOrEqual", []interface{}{int64(0), int64(1)}, "0 is not greater than or equal 1"},
+		{"GreaterThanOrEqual", []interface{}{int32(0), int32(1)}, "0 is not greater than or equal 1"},
+		{"GreaterThanOrEqual", []interface{}{int16(0), int16(1)}, "0 is not greater than or equal 1"},
+		{"GreaterThanOrEqual", []interface{}{int8(0), int8(1)}, "0 is not greater than or equal 1"},
+		{"GreaterThanOrEqual", []interface{}{uint64(0), uint64(1)}, "0 is not greater than or equal 1"},
+		{"GreaterThanOrEqual", []interface{}{uint32(0), uint32(1)}, "0 is not greater than or equal 1"},
+		{"GreaterThanOrEqual", []interface{}{uint16(0), uint16(1)}, "0 is not greater than or equal 1"},
+		{"GreaterThanOrEqual", []interface{}{uint8(0), uint8(1)}, "0 is not greater than or equal 1"},
+		{"GreaterThanOrEqual", []interface{}{uint(0), uint(1)}, "0 is not greater than or equal 1"},
+		{"GreaterThanOrEqual", []interface{}{float32(0), float32(1)}, "0 is not greater than or equal 1"},
+		{"GreaterThanOrEqual", []interface{}{float64(0), float64(1)}, "0 is not greater than or equal 1"},
+		{"GreaterThanOrEqual", []interface{}{"a", "b"}, "a is not greater than or equal b"},
+		{"GreaterThanOrEqual", []interface{}{"a", 1}, "a and 1 are not of the same type"},
+	}
+
+	assertAllReturnsFalse(t, data)
+}
+
+func TestAssertion_LowerThanOrEqual_ReturnsTrue(t *testing.T) {
+	data := []MethodDataOK{
+		{"LowerThanOrEqual", []interface{}{0, 1}},
+		{"LowerThanOrEqual", []interface{}{int64(0), int64(1)}},
+		{"LowerThanOrEqual", []interface{}{int32(0), int32(1)}},
+		{"LowerThanOrEqual", []interface{}{int16(0), int16(1)}},
+		{"LowerThanOrEqual", []interface{}{int8(0), int8(1)}},
+		{"LowerThanOrEqual", []interface{}{uint64(0), uint64(1)}},
+		{"LowerThanOrEqual", []interface{}{uint32(0), uint32(1)}},
+		{"LowerThanOrEqual", []interface{}{uint16(0), uint16(1)}},
+		{"LowerThanOrEqual", []interface{}{uint8(0), uint8(1)}},
+		{"LowerThanOrEqual", []interface{}{uint(0), uint(1)}},
+		{"LowerThanOrEqual", []interface{}{float32(0), float32(1)}},
+		{"LowerThanOrEqual", []interface{}{float64(0), float64(1)}},
+		{"LowerThanOrEqual", []interface{}{"a", "b"}},
+		{"LowerThanOrEqual", []interface{}{1, 1}},
+		{"LowerThanOrEqual", []interface{}{int64(1), int64(1)}},
+		{"LowerThanOrEqual", []interface{}{int32(1), int32(1)}},
+		{"LowerThanOrEqual", []interface{}{int16(1), int16(1)}},
+		{"LowerThanOrEqual", []interface{}{int8(1), int8(1)}},
+		{"LowerThanOrEqual", []interface{}{uint64(1), uint64(1)}},
+		{"LowerThanOrEqual", []interface{}{uint32(1), uint32(1)}},
+		{"LowerThanOrEqual", []interface{}{uint16(1), uint16(1)}},
+		{"LowerThanOrEqual", []interface{}{uint8(1), uint8(1)}},
+		{"LowerThanOrEqual", []interface{}{uint(1), uint(1)}},
+		{"LowerThanOrEqual", []interface{}{float32(1), float32(1)}},
+		{"LowerThanOrEqual", []interface{}{float64(1), float64(1)}},
+		{"LowerThanOrEqual", []interface{}{"a", "a"}},
+	}
+
+	assertAllReturnsTrue(t, data)
+}
+
+func TestAssertion_LowerThanOrEqual_ReturnsFalse(t *testing.T) {
+	data := []MethodDataKO{
+		{"LowerThanOrEqual", []interface{}{1, 0}, "1 is not lower than or equal 0"},
+		{"LowerThanOrEqual", []interface{}{int64(1), int64(0)}, "1 is not lower than or equal 0"},
+		{"LowerThanOrEqual", []interface{}{int32(1), int32(0)}, "1 is not lower than or equal 0"},
+		{"LowerThanOrEqual", []interface{}{int16(1), int16(0)}, "1 is not lower than or equal 0"},
+		{"LowerThanOrEqual", []interface{}{int8(1), int8(0)}, "1 is not lower than or equal 0"},
+		{"LowerThanOrEqual", []interface{}{uint64(1), uint64(0)}, "1 is not lower than or equal 0"},
+		{"LowerThanOrEqual", []interface{}{uint32(1), uint32(0)}, "1 is not lower than or equal 0"},
+		{"LowerThanOrEqual", []interface{}{uint16(1), uint16(0)}, "1 is not lower than or equal 0"},
+		{"LowerThanOrEqual", []interface{}{uint8(1), uint8(0)}, "1 is not lower than or equal 0"},
+		{"LowerThanOrEqual", []interface{}{uint(1), uint(0)}, "1 is not lower than or equal 0"},
+		{"LowerThanOrEqual", []interface{}{float32(1), float32(0)}, "1 is not lower than or equal 0"},
+		{"LowerThanOrEqual", []interface{}{float64(1), float64(0)}, "1 is not lower than or equal 0"},
+		{"LowerThanOrEqual", []interface{}{"b", "a"}, "b is not lower than or equal a"},
+		{"LowerThanOrEqual", []interface{}{"a", 1}, "a and 1 are not of the same type"},
+	}
+
+	assertAllReturnsFalse(t, data)
+}
+
+func TestAssertion_Between_ReturnsTrue(t *testing.T) {
+	data := []MethodDataOK{
+		{"Between", []interface{}{0, 0, 1}},
+		{"Between", []interface{}{int64(0), int64(0), int64(1)}},
+		{"Between", []interface{}{int32(0), int32(0), int32(1)}},
+		{"Between", []interface{}{int16(0), int16(0), int16(1)}},
+		{"Between", []interface{}{int8(0), int8(0), int8(1)}},
+		{"Between", []interface{}{uint64(0), uint64(0), uint64(1)}},
+		{"Between", []interface{}{uint32(0), uint32(0), uint32(1)}},
+		{"Between", []interface{}{uint16(0), uint16(0), uint16(1)}},
+		{"Between", []interface{}{uint8(0), uint8(0), uint8(1)}},
+		{"Between", []interface{}{uint(0), uint(0), uint(1)}},
+		{"Between", []interface{}{float32(0), float32(0), float32(1)}},
+		{"Between", []interface{}{float64(0), float64(0), float64(1)}},
+		{"Between", []interface{}{"a", "a", "b"}},
+		{"Between", []interface{}{1, 0, 1}},
+		{"Between", []interface{}{int64(1), int64(0), int64(1)}},
+		{"Between", []interface{}{int32(1), int32(0), int32(1)}},
+		{"Between", []interface{}{int16(1), int16(0), int16(1)}},
+		{"Between", []interface{}{int8(1), int8(0), int8(1)}},
+		{"Between", []interface{}{uint64(1), uint64(0), uint64(1)}},
+		{"Between", []interface{}{uint32(1), uint32(0), uint32(1)}},
+		{"Between", []interface{}{uint16(1), uint16(0), uint16(1)}},
+		{"Between", []interface{}{uint8(1), uint8(0), uint8(1)}},
+		{"Between", []interface{}{uint(1), uint(0), uint(1)}},
+		{"Between", []interface{}{float32(1), float32(0), float32(1)}},
+		{"Between", []interface{}{float64(1), float64(0), float64(1)}},
+		{"Between", []interface{}{"b", "a", "b"}},
+		{"Between", []interface{}{1, 0, 2}},
+		{"Between", []interface{}{int64(1), int64(0), int64(2)}},
+		{"Between", []interface{}{int32(1), int32(0), int32(2)}},
+		{"Between", []interface{}{int16(1), int16(0), int16(2)}},
+		{"Between", []interface{}{int8(1), int8(0), int8(2)}},
+		{"Between", []interface{}{uint64(1), uint64(0), uint64(2)}},
+		{"Between", []interface{}{uint32(1), uint32(0), uint32(2)}},
+		{"Between", []interface{}{uint16(1), uint16(0), uint16(2)}},
+		{"Between", []interface{}{uint8(1), uint8(0), uint8(2)}},
+		{"Between", []interface{}{uint(1), uint(0), uint(2)}},
+		{"Between", []interface{}{float32(1), float32(0), float32(2)}},
+		{"Between", []interface{}{float64(1), float64(0), float64(2)}},
+		{"Between", []interface{}{"b", "a", "c"}},
+	}
+
+	assertAllReturnsTrue(t, data)
+}
+
+func TestAssertion_Between_ReturnsFalse(t *testing.T) {
+	data := []MethodDataKO{
+		{"Between", []interface{}{1, 0, 0}, "1 is not between 0 and 0"},
+		{"Between", []interface{}{int64(1), int64(0), int64(0)}, "1 is not between 0 and 0"},
+		{"Between", []interface{}{int32(1), int32(0), int32(0)}, "1 is not between 0 and 0"},
+		{"Between", []interface{}{int16(1), int16(0), int16(0)}, "1 is not between 0 and 0"},
+		{"Between", []interface{}{int8(1), int8(0), int8(0)}, "1 is not between 0 and 0"},
+		{"Between", []interface{}{uint64(1), uint64(0), uint64(0)}, "1 is not between 0 and 0"},
+		{"Between", []interface{}{uint32(1), uint32(0), uint32(0)}, "1 is not between 0 and 0"},
+		{"Between", []interface{}{uint16(1), uint16(0), uint16(0)}, "1 is not between 0 and 0"},
+		{"Between", []interface{}{uint8(1), uint8(0), uint8(0)}, "1 is not between 0 and 0"},
+		{"Between", []interface{}{uint(1), uint(0), uint(0)}, "1 is not between 0 and 0"},
+		{"Between", []interface{}{float32(1), float32(0), float32(0)}, "1 is not between 0 and 0"},
+		{"Between", []interface{}{float64(1), float64(0), float64(0)}, "1 is not between 0 and 0"},
+		{"Between", []interface{}{"b", "a", "a"}, "b is not between a and a"},
+		{"Between", []interface{}{"a", 1, 1}, "a is not between 1 and 1"},
+	}
+
+	assertAllReturnsFalse(t, data)
+}
+
+func TestAssertion_BetweenExclude_ReturnsTrue(t *testing.T) {
+	data := []MethodDataOK{
+
+		{"BetweenExclude", []interface{}{1, 0, 2}},
+		{"BetweenExclude", []interface{}{int64(1), int64(0), int64(2)}},
+		{"BetweenExclude", []interface{}{int32(1), int32(0), int32(2)}},
+		{"BetweenExclude", []interface{}{int16(1), int16(0), int16(2)}},
+		{"BetweenExclude", []interface{}{int8(1), int8(0), int8(2)}},
+		{"BetweenExclude", []interface{}{uint64(1), uint64(0), uint64(2)}},
+		{"BetweenExclude", []interface{}{uint32(1), uint32(0), uint32(2)}},
+		{"BetweenExclude", []interface{}{uint16(1), uint16(0), uint16(2)}},
+		{"BetweenExclude", []interface{}{uint8(1), uint8(0), uint8(2)}},
+		{"BetweenExclude", []interface{}{uint(1), uint(0), uint(2)}},
+		{"BetweenExclude", []interface{}{float32(1), float32(0), float32(2)}},
+		{"BetweenExclude", []interface{}{float64(1), float64(0), float64(2)}},
+		{"BetweenExclude", []interface{}{"b", "a", "c"}},
+	}
+
+	assertAllReturnsTrue(t, data)
+}
+
+func TestAssertion_BetweenExclude_ReturnsFalse(t *testing.T) {
+	data := []MethodDataKO{
+		{"BetweenExclude", []interface{}{0, 0, 1}, "0 is not between 0 and 1 both excluded"},
+		{"BetweenExclude", []interface{}{int64(0), int64(0), int64(1)}, "0 is not between 0 and 1 both excluded"},
+		{"BetweenExclude", []interface{}{int32(0), int32(0), int32(1)}, "0 is not between 0 and 1 both excluded"},
+		{"BetweenExclude", []interface{}{int16(0), int16(0), int16(1)}, "0 is not between 0 and 1 both excluded"},
+		{"BetweenExclude", []interface{}{int8(0), int8(0), int8(1)}, "0 is not between 0 and 1 both excluded"},
+		{"BetweenExclude", []interface{}{uint64(0), uint64(0), uint64(1)}, "0 is not between 0 and 1 both excluded"},
+		{"BetweenExclude", []interface{}{uint32(0), uint32(0), uint32(1)}, "0 is not between 0 and 1 both excluded"},
+		{"BetweenExclude", []interface{}{uint16(0), uint16(0), uint16(1)}, "0 is not between 0 and 1 both excluded"},
+		{"BetweenExclude", []interface{}{uint8(0), uint8(0), uint8(1)}, "0 is not between 0 and 1 both excluded"},
+		{"BetweenExclude", []interface{}{uint(0), uint(0), uint(1)}, "0 is not between 0 and 1 both excluded"},
+		{"BetweenExclude", []interface{}{float32(0), float32(0), float32(1)}, "0 is not between 0 and 1 both excluded"},
+		{"BetweenExclude", []interface{}{float64(0), float64(0), float64(1)}, "0 is not between 0 and 1 both excluded"},
+		{"BetweenExclude", []interface{}{"a", "a", "b"}, "a is not between a and b both excluded"},
+		{"BetweenExclude", []interface{}{1, 0, 1}, "1 is not between 0 and 1 both excluded"},
+		{"BetweenExclude", []interface{}{int64(1), int64(0), int64(1)}, "1 is not between 0 and 1 both excluded"},
+		{"BetweenExclude", []interface{}{int32(1), int32(0), int32(1)}, "1 is not between 0 and 1 both excluded"},
+		{"BetweenExclude", []interface{}{int16(1), int16(0), int16(1)}, "1 is not between 0 and 1 both excluded"},
+		{"BetweenExclude", []interface{}{int8(1), int8(0), int8(1)}, "1 is not between 0 and 1 both excluded"},
+		{"BetweenExclude", []interface{}{uint64(1), uint64(0), uint64(1)}, "1 is not between 0 and 1 both excluded"},
+		{"BetweenExclude", []interface{}{uint32(1), uint32(0), uint32(1)}, "1 is not between 0 and 1 both excluded"},
+		{"BetweenExclude", []interface{}{uint16(1), uint16(0), uint16(1)}, "1 is not between 0 and 1 both excluded"},
+		{"BetweenExclude", []interface{}{uint8(1), uint8(0), uint8(1)}, "1 is not between 0 and 1 both excluded"},
+		{"BetweenExclude", []interface{}{uint(1), uint(0), uint(1)}, "1 is not between 0 and 1 both excluded"},
+		{"BetweenExclude", []interface{}{float32(1), float32(0), float32(1)}, "1 is not between 0 and 1 both excluded"},
+		{"BetweenExclude", []interface{}{float64(1), float64(0), float64(1)}, "1 is not between 0 and 1 both excluded"},
+		{"BetweenExclude", []interface{}{"b", "a", "b"}, "b is not between a and b both excluded"},
+		{"BetweenExclude", []interface{}{1, 0, 0}, "1 is not between 0 and 0 both excluded"},
+		{"BetweenExclude", []interface{}{int64(1), int64(0), int64(0)}, "1 is not between 0 and 0 both excluded"},
+		{"BetweenExclude", []interface{}{int32(1), int32(0), int32(0)}, "1 is not between 0 and 0 both excluded"},
+		{"BetweenExclude", []interface{}{int16(1), int16(0), int16(0)}, "1 is not between 0 and 0 both excluded"},
+		{"BetweenExclude", []interface{}{int8(1), int8(0), int8(0)}, "1 is not between 0 and 0 both excluded"},
+		{"BetweenExclude", []interface{}{uint64(1), uint64(0), uint64(0)}, "1 is not between 0 and 0 both excluded"},
+		{"BetweenExclude", []interface{}{uint32(1), uint32(0), uint32(0)}, "1 is not between 0 and 0 both excluded"},
+		{"BetweenExclude", []interface{}{uint16(1), uint16(0), uint16(0)}, "1 is not between 0 and 0 both excluded"},
+		{"BetweenExclude", []interface{}{uint8(1), uint8(0), uint8(0)}, "1 is not between 0 and 0 both excluded"},
+		{"BetweenExclude", []interface{}{uint(1), uint(0), uint(0)}, "1 is not between 0 and 0 both excluded"},
+		{"BetweenExclude", []interface{}{float32(1), float32(0), float32(0)}, "1 is not between 0 and 0 both excluded"},
+		{"BetweenExclude", []interface{}{float64(1), float64(0), float64(0)}, "1 is not between 0 and 0 both excluded"},
+		{"BetweenExclude", []interface{}{"b", "a", "a"}, "b is not between a and a both excluded"},
+		{"BetweenExclude", []interface{}{"a", 1, 1}, "a is not between 1 and 1 both excluded"},
+	}
+
+	assertAllReturnsFalse(t, data)
+}
+
+func TestAssertion_VariadicMethods_PanicIfInvalidArgumentCount(t *testing.T) {
+	errString := "missing required arguments"
+
+	a := New()
+	assert.PanicsWithError(t, errString, func() {
+		a.Nil()
+	})
+	assert.PanicsWithError(t, errString, func() {
+		a.Equal(1)
+	})
+	assert.PanicsWithError(t, errString, func() {
+		a.GreaterThan(1)
+	})
+	assert.PanicsWithError(t, errString, func() {
+		a.LowerThan(1)
+	})
+	assert.PanicsWithError(t, errString, func() {
+		a.GreaterThanOrEqual(1)
+	})
+	assert.PanicsWithError(t, errString, func() {
+		a.LowerThanOrEqual(1)
+	})
+	assert.PanicsWithError(t, errString, func() {
+		a.Between(1, 1)
+	})
+	assert.PanicsWithError(t, errString, func() {
+		a.BetweenExclude(1, 1)
+	})
+
 }

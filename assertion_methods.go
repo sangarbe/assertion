@@ -10,6 +10,8 @@ import (
 )
 
 const (
+	errMsgMissingArgs       = `missing required arguments`
+	errMsgNotSameType       = `%v and %v are not of the same type`
 	errMsgNot               = `%v is not %v`
 	errMsgNotEqual          = `%v is not equal %v`
 	errMsgNotValid          = `%v is not a valid %v`

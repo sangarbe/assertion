@@ -17,8 +17,8 @@ func TestAssertion_New(t *testing.T) {
 
 func TestAssertion_ErrorAt(t *testing.T) {
 	a := New()
-	a.GreaterThanInt(1, 1)
-	a.GreaterThanInt(2, 2)
+	a.GreaterThan(1, 1)
+	a.GreaterThan(2, 2)
 
 	assert.True(t, a.HasErrors())
 	assert.Equal(t, 2, a.CountErrors())
@@ -146,6 +146,22 @@ func TestAssertion_AllAssertMethodsReturnKo(t *testing.T) {
 	}
 }
 
+func assertAllReturnsTrue(t *testing.T, data []MethodDataOK) {
+	for _, i := range data {
+		t.Run(fmt.Sprintf("%s %v", i.method, i.okArgs), func(t *testing.T) {
+			assertMethodReturnsOk(t, i.method, i.okArgs)
+		})
+	}
+}
+
+func assertAllReturnsFalse(t *testing.T, data []MethodDataKO) {
+	for _, i := range data {
+		t.Run(fmt.Sprintf("%s %v", i.method, i.koArgs), func(t *testing.T) {
+			assertMethodReturnsKo(t, i.method, i.koArgs, i.errMsg)
+		})
+	}
+}
+
 func assertMethodReturnsOk(t *testing.T, method string, okArgs []interface{}) {
 	assertMethodMeetsExpectations(t, method, okArgs, true)
 }
@@ -164,7 +180,7 @@ func assertMethodMeetsExpectations(t *testing.T, method string, params []interfa
 	in := make([]reflect.Value, len(params))
 	for k, param := range params {
 		v := reflect.ValueOf(param)
-		if !v.IsValid(){
+		if !v.IsValid() {
 			v = reflect.ValueOf(((*int)(nil)))
 		}
 		if k >= f.NumIn()-1 {
