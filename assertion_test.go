@@ -35,26 +35,6 @@ func TestAssertion_AllAssertMethodsReturnOk(t *testing.T) {
 		method string
 		okArgs []interface{}
 	}{
-		{"Boolean", []interface{}{"true"}},
-		{"Boolean", []interface{}{"TRUE"}},
-		{"Boolean", []interface{}{"t"}},
-		{"Boolean", []interface{}{"T"}},
-		{"Boolean", []interface{}{"1"}},
-		{"Boolean", []interface{}{"false"}},
-		{"Boolean", []interface{}{"FALSE"}},
-		{"Boolean", []interface{}{"f"}},
-		{"Boolean", []interface{}{"F"}},
-		{"Boolean", []interface{}{"0"}},
-		{"Truthy", []interface{}{"true"}},
-		{"Truthy", []interface{}{"TRUE"}},
-		{"Truthy", []interface{}{"t"}},
-		{"Truthy", []interface{}{"T"}},
-		{"Truthy", []interface{}{"1"}},
-		{"Falsy", []interface{}{"false"}},
-		{"Falsy", []interface{}{"FALSE"}},
-		{"Falsy", []interface{}{"f"}},
-		{"Falsy", []interface{}{"F"}},
-		{"Falsy", []interface{}{"0"}},
 		{"Email", []interface{}{"test@mail.com"}},
 		{"Email", []interface{}{"test@subdomain.mail.com"}},
 		{"Email", []interface{}{"0123456789@mail.com"}},
@@ -77,12 +57,6 @@ func TestAssertion_AllAssertMethodsReturnOk(t *testing.T) {
 		{"Phone", []interface{}{"+33626525690"}},
 		{"Phone", []interface{}{"33626525690"}},
 		{"Phone", []interface{}{"+16174552211"}},
-		{"Integer", []interface{}{"16174552211"}},
-		{"Integer", []interface{}{"110110101"}},
-		{"Integer", []interface{}{"110_110_101"}},
-		{"Integer", []interface{}{"0b110110101"}},
-		{"Integer", []interface{}{"0o110110101"}},
-		{"Integer", []interface{}{"0x110110101"}},
 	}
 
 	for _, i := range data {
@@ -98,10 +72,6 @@ func TestAssertion_AllAssertMethodsReturnKo(t *testing.T) {
 		koArgs []interface{}
 		errMsg string
 	}{
-		{"Boolean", []interface{}{"on"}, "on is not a valid boolean string"},
-		{"Boolean", []interface{}{"off"}, "off is not a valid boolean string"},
-		{"Truthy", []interface{}{"on"}, "on is not a valid truthy string"},
-		{"Falsy", []interface{}{"off"}, "off is not a valid falsy string"},
 		{"Email", []interface{}{"plainaddress"}, "plainaddress is not a valid email"},
 		{"Email", []interface{}{"#@%^%#$@#$@#.com"}, "#@%^%#$@#$@#.com is not a valid email"},
 		{"Email", []interface{}{"@example.com"}, "@example.com is not a valid email"},
@@ -133,11 +103,7 @@ func TestAssertion_AllAssertMethodsReturnKo(t *testing.T) {
 		{"Base64", []interface{}{"c29tZSBkYXRhIHdpdGggACBhbmQg77u/,"}, "c29tZSBkYXRhIHdpdGggACBhbmQg77u/, is not a valid base64 encoded value"},
 		{"Phone", []interface{}{"+3362652569e"}, "+3362652569e is not a valid phone"},
 		{"Phone", []interface{}{"+3361231231232652569"}, "+3361231231232652569 is not a valid phone"},
-		{"Integer", []interface{}{"0b110110102"}, "0b110110102 is not a valid integer"},
-		{"Integer", []interface{}{"0x11011010G"}, "0x11011010G is not a valid integer"},
-		{"Integer", []interface{}{"0o110110108"}, "0o110110108 is not a valid integer"},
-		{"Integer", []interface{}{"110.110.108"}, "110.110.108 is not a valid integer"},
-	}
+			}
 
 	for _, i := range data {
 		t.Run(fmt.Sprintf("%s %v", i.method, i.koArgs), func(t *testing.T) {

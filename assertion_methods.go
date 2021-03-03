@@ -4,7 +4,6 @@ import (
 	"encoding/base64"
 	"fmt"
 	"regexp"
-	"strconv"
 	"strings"
 	"unicode"
 )
@@ -47,49 +46,6 @@ var (
 	regexpIpv4  = regexp.MustCompile(rexIPv4)
 	regexpE164  = regexp.MustCompile(rexE164)
 )
-
-// Boolean returns true if a given string is one of the following accepted forms:
-// true, false, TRUE, FALSE, t, f, 1, or 0
-func (a *Assertion) Boolean(value string, msgArgs ...interface{}) bool {
-	if _, err := strconv.ParseBool(value); err == nil {
-		return true
-	}
-
-	a.addErrorMsg(fmt.Sprintf(errMsgNotValid, value, "boolean string"), msgArgs...)
-	return false
-}
-
-// Integer returns true if a given string can be parsed as a valid integer value
-func (a *Assertion) Integer(value string, msgArgs ...interface{}) bool {
-	if _, err := strconv.ParseInt(value, 0, 64); err == nil {
-		return true
-	}
-
-	a.addErrorMsg(fmt.Sprintf(errMsgNotValid, value, "integer"), msgArgs...)
-	return false
-}
-
-// Truthy returns true if a given string is one of the following accepted forms:
-// true, TRUE, t, or 1
-func (a *Assertion) Truthy(value string, msgArgs ...interface{}) bool {
-	if b, err := strconv.ParseBool(value); err == nil {
-		return b
-	}
-
-	a.addErrorMsg(fmt.Sprintf(errMsgNotValid, value, "truthy string"), msgArgs...)
-	return false
-}
-
-// Falsy returns true if a given string is one of the following accepted forms:
-// true, false, TRUE, FALSE, t, f, 1, and 0
-func (a *Assertion) Falsy(value string, msgArgs ...interface{}) bool {
-	if b, err := strconv.ParseBool(value); err == nil {
-		return !b
-	}
-
-	a.addErrorMsg(fmt.Sprintf(errMsgNotValid, value, "falsy string"), msgArgs...)
-	return false
-}
 
 // Email returns true if a given value is a valid email format. It allows local
 // portion to be quoted text and ipv4 for the domain portion (between square brackets).
