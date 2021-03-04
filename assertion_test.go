@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"reflect"
-	"strings"
 	"testing"
 )
 
@@ -30,92 +29,10 @@ func TestAssertion_ErrorAt(t *testing.T) {
 	assert.Nil(t, a.ErrorAt(-3))
 }
 
-func TestAssertion_AllAssertMethodsReturnOk(t *testing.T) {
-	data := []struct {
-		method string
-		okArgs []interface{}
-	}{
-		{"Email", []interface{}{"test@mail.com"}},
-		{"Email", []interface{}{"test@subdomain.mail.com"}},
-		{"Email", []interface{}{"0123456789@mail.com"}},
-		{"Email", []interface{}{"first.last@mail.com"}},
-		{"Email", []interface{}{"first+last@mail.com"}},
-		{"Email", []interface{}{"first-last@mail.com"}},
-		{"Email", []interface{}{"first_last@mail.com"}},
-		{"Email", []interface{}{`"first last"@mail.com`}},
-		{"Email", []interface{}{"test@[0.0.0.0]"}},
-		{"Email", []interface{}{"email@111.222.333.44444"}},
-		{"Email", []interface{}{"test@" + strings.Repeat("subd.", 50) + "com"}},
-		{"Ipv4", []interface{}{"127.0.0.1"}},
-		{"Ipv4", []interface{}{"255.255.255.255"}},
-		{"Ipv4", []interface{}{"0.0.0.0"}},
-		{"Ipv4", []interface{}{"199.160.1.10"}},
-		{"Alfanum", []interface{}{"abc123"}},
-		{"Alfanum", []interface{}{"ABC098"}},
-		{"Alfanum", []interface{}{"España"}},
-		{"Base64", []interface{}{"c29tZSBkYXRhIHdpdGggACBhbmQg77u/"}},
-		{"Phone", []interface{}{"+33626525690"}},
-		{"Phone", []interface{}{"33626525690"}},
-		{"Phone", []interface{}{"+16174552211"}},
-	}
-
-	for _, i := range data {
-		t.Run(fmt.Sprintf("%s %v", i.method, i.okArgs), func(t *testing.T) {
-			assertMethodReturnsOk(t, i.method, i.okArgs)
-		})
-	}
-}
-
-func TestAssertion_AllAssertMethodsReturnKo(t *testing.T) {
-	data := []struct {
-		method string
-		koArgs []interface{}
-		errMsg string
-	}{
-		{"Email", []interface{}{"plainaddress"}, "plainaddress is not a valid email"},
-		{"Email", []interface{}{"#@%^%#$@#$@#.com"}, "#@%^%#$@#$@#.com is not a valid email"},
-		{"Email", []interface{}{"@example.com"}, "@example.com is not a valid email"},
-		{"Email", []interface{}{"Joe Smith <email@example.com>"}, "Joe Smith <email@example.com> is not a valid email"},
-		{"Email", []interface{}{"email.example.com"}, "email.example.com is not a valid email"},
-		{"Email", []interface{}{"email@example@example.com"}, "email@example@example.com is not a valid email"},
-		{"Email", []interface{}{".email@example.com"}, ".email@example.com is not a valid email"},
-		{"Email", []interface{}{"email.@example.com"}, "email.@example.com is not a valid email"},
-		{"Email", []interface{}{"email..email@example.com"}, "email..email@example.com is not a valid email"},
-		{"Email", []interface{}{"あいうえお@example.com"}, "あいうえお@example.com is not a valid email"},
-		{"Email", []interface{}{"email@example.com (Joe Smith)"}, "email@example.com (Joe Smith) is not a valid email"},
-		{"Email", []interface{}{"email@example"}, "email@example is not a valid email"},
-		{"Email", []interface{}{"email@-example.com"}, "email@-example.com is not a valid email"},
-		{"Email", []interface{}{"email@example-.com"}, "email@example-.com is not a valid email"},
-		{"Email", []interface{}{"email@example..com"}, "email@example..com is not a valid email"},
-		{"Email", []interface{}{"Abc..123@example.com"}, "Abc..123@example.com is not a valid email"},
-		{"Email", []interface{}{"first last@example.com"}, "first last@example.com is not a valid email"},
-		{"Email", []interface{}{"test@" + strings.Repeat("subd.", 50) + "com.es"}, "test@" + strings.Repeat("subd.", 50) + "com.es is not a valid email"},
-		{"Email", []interface{}{"test@0.0.0.0"}, "test@0.0.0.0 is not a valid email"},
-		{"Ipv4", []interface{}{"127.0.01"}, "127.0.01 is not a valid ipv4"},
-		{"Ipv4", []interface{}{"256.0.0.1"}, "256.0.0.1 is not a valid ipv4"},
-		{"Ipv4", []interface{}{"0.0.0.0.0"}, "0.0.0.0.0 is not a valid ipv4"},
-		{"Ipv4", []interface{}{"0.0.0.1234"}, "0.0.0.1234 is not a valid ipv4"},
-		{"Ipv4", []interface{}{"0-0-0-0"}, "0-0-0-0 is not a valid ipv4"},
-		{"Alfanum", []interface{}{"abc 123"}, "abc 123 is not alfa-numeric"},
-		{"Alfanum", []interface{}{"abc.123"}, "abc.123 is not alfa-numeric"},
-		{"Alfanum", []interface{}{"abc#123"}, "abc#123 is not alfa-numeric"},
-		{"Base64", []interface{}{"c29tZSBkYXRhIHdpdGggACBhbmQg77u"}, "c29tZSBkYXRhIHdpdGggACBhbmQg77u is not a valid base64 encoded value"},
-		{"Base64", []interface{}{"c29tZSBkYXRhIHdpdGggACBhbmQg77u/,"}, "c29tZSBkYXRhIHdpdGggACBhbmQg77u/, is not a valid base64 encoded value"},
-		{"Phone", []interface{}{"+3362652569e"}, "+3362652569e is not a valid phone"},
-		{"Phone", []interface{}{"+3361231231232652569"}, "+3361231231232652569 is not a valid phone"},
-			}
-
-	for _, i := range data {
-		t.Run(fmt.Sprintf("%s %v", i.method, i.koArgs), func(t *testing.T) {
-			assertMethodReturnsKo(t, i.method, i.koArgs, i.errMsg)
-		})
-	}
-}
-
 func assertAllReturnsTrue(t *testing.T, data []MethodDataOK) {
 	for _, i := range data {
 		t.Run(fmt.Sprintf("%s %v", i.method, i.okArgs), func(t *testing.T) {
-			assertMethodReturnsOk(t, i.method, i.okArgs)
+			assertMethodReturnsTrue(t, i.method, i.okArgs)
 		})
 	}
 }
@@ -123,16 +40,16 @@ func assertAllReturnsTrue(t *testing.T, data []MethodDataOK) {
 func assertAllReturnsFalse(t *testing.T, data []MethodDataKO) {
 	for _, i := range data {
 		t.Run(fmt.Sprintf("%s %v", i.method, i.koArgs), func(t *testing.T) {
-			assertMethodReturnsKo(t, i.method, i.koArgs, i.errMsg)
+			assertMethodReturnsFalse(t, i.method, i.koArgs, i.errMsg)
 		})
 	}
 }
 
-func assertMethodReturnsOk(t *testing.T, method string, okArgs []interface{}) {
+func assertMethodReturnsTrue(t *testing.T, method string, okArgs []interface{}) {
 	assertMethodMeetsExpectations(t, method, okArgs, true)
 }
 
-func assertMethodReturnsKo(t *testing.T, method string, koArgs []interface{}, errMsg string) {
+func assertMethodReturnsFalse(t *testing.T, method string, koArgs []interface{}, errMsg string) {
 	assertMethodMeetsExpectations(t, method, koArgs, false, errMsg)
 	assertMethodMeetsExpectations(t, method, append(koArgs, "custom error"), false, "custom error")
 	assertMethodMeetsExpectations(t, method, append(koArgs, "%s", "custom error"), false, "custom error")

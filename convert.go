@@ -1,6 +1,7 @@
 package assertion
 
 import (
+	"encoding/base64"
 	"fmt"
 	"strconv"
 )
@@ -154,6 +155,16 @@ func (a *Assertion) Float(value string, msgArgs ...interface{}) bool {
 
 	a.addErrorMsg(fmt.Sprintf(errMsgNotValid, value, "float"), msgArgs...)
 	return false
+}
+
+// Base64 returns true if a given value ia a valid base64 encoded string
+func (a *Assertion) Base64(value string, msgArgs ...interface{}) bool {
+	_, err := base64.StdEncoding.DecodeString(value)
+	if err != nil {
+		a.addErrorMsg(fmt.Sprintf(errMsgNotValid, value, "base64 encoded value"), msgArgs...)
+		return false
+	}
+	return true
 }
 
 

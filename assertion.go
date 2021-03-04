@@ -5,6 +5,21 @@ import (
 	"fmt"
 )
 
+const (
+	errMsgMissingArgs       = `missing required arguments`
+	errMsgNotSameType       = `%v and %v are not of the same type`
+	errMsgNot               = `%v is not %v`
+	errMsgNotEqual          = `%v is not equal %v`
+	errMsgNotValid          = `%v is not a valid %v`
+	errMsgNotGreater        = `%v is not greater than %v`
+	errMsgNotLower          = `%v is not lower than %v`
+	errMsgNotGreaterEqual   = `%v is not greater than or equal %v`
+	errMsgNotLowerEqual     = `%v is not lower than or equal %v`
+	errMsgNotDifferent      = `%v is not different %v`
+	errMsgNotBetween        = `%v is not between %v and %v`
+	errMsgNotBetweenExclude = `%v is not between %v and %v both excluded`
+)
+
 // Assertion represents a data assertion process. It provides several methods
 // to execute common assertions, and stores and gives access to the corresponding
 // errors result of assertion failures.

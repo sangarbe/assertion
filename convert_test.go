@@ -320,3 +320,20 @@ func TestAssertion_Float_ReturnsFalse(t *testing.T) {
 
 	assertAllReturnsFalse(t, data)
 }
+
+func TestAssertion_Base64_ReturnsTrue(t *testing.T) {
+	data := []MethodDataOK{
+		{"Base64", []interface{}{"c29tZSBkYXRhIHdpdGggACBhbmQg77u/"}},
+	}
+
+	assertAllReturnsTrue(t, data)
+}
+
+func TestAssertion_Base64_ReturnsFalse(t *testing.T) {
+	data := []MethodDataKO{
+		{"Base64", []interface{}{"c29tZSBkYXRhIHdpdGggACBhbmQg77u"}, "c29tZSBkYXRhIHdpdGggACBhbmQg77u is not a valid base64 encoded value"},
+		{"Base64", []interface{}{"c29tZSBkYXRhIHdpdGggACBhbmQg77u/,"}, "c29tZSBkYXRhIHdpdGggACBhbmQg77u/, is not a valid base64 encoded value"},
+	}
+
+	assertAllReturnsFalse(t, data)
+}
