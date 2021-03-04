@@ -18,6 +18,8 @@ const (
 	errMsgNotDifferent      = `%v is not different %v`
 	errMsgNotBetween        = `%v is not between %v and %v`
 	errMsgNotBetweenExclude = `%v is not between %v and %v both excluded`
+	errMsgNotStartsWith     = `%v does not start with %v`
+	errMsgNotEndsWith       = `%v does not end with %v`
 )
 
 // Assertion represents a data assertion process. It provides several methods
@@ -89,5 +91,3 @@ func buildError(defaultMsg string, msgArgs ...interface{}) error {
 
 	return errors.New(errMsg)
 }
-
-
