@@ -39,3 +39,23 @@ func TestAssertion_EndsWith_ReturnsFalse(t *testing.T) {
 
 	assertAllReturnsFalse(t, data)
 }
+
+func TestAssertion_Contains_ReturnsTrue(t *testing.T) {
+	data := []MethodDataOK{
+		{"Contains", []interface{}{"Hello world!", "world"}},
+		{"Contains", []interface{}{"Hello world!", "Hello"}},
+		{"Contains", []interface{}{"Hello world!", "world!"}},
+	}
+
+	assertAllReturnsTrue(t, data)
+}
+
+func TestAssertion_Contains_ReturnsFalse(t *testing.T) {
+	data := []MethodDataKO{
+		{"Contains", []interface{}{"Hello world!", "World"}, "Hello world! does not contain World"},
+		{"Contains", []interface{}{"Hello world!", "lloworld"}, "Hello world! does not contain lloworld"},
+		{"Contains", []interface{}{"Hello world!", "hello"}, "Hello world! does not contain hello"},
+	}
+
+	assertAllReturnsFalse(t, data)
+}

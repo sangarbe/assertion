@@ -20,6 +20,7 @@ const (
 	errMsgNotBetweenExclude = `%v is not between %v and %v both excluded`
 	errMsgNotStartsWith     = `%v does not start with %v`
 	errMsgNotEndsWith       = `%v does not end with %v`
+	errMsgNotContains       = `%v does not contain %v`
 )
 
 // Assertion represents a data assertion process. It provides several methods
