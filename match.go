@@ -43,6 +43,30 @@ func (a *Assertion) Alfanum(value string, msgArgs ...interface{}) bool {
 	return true
 }
 
+// Digits returns true if a given value only contains digit runes.
+func (a *Assertion) Digits(value string, msgArgs ...interface{}) bool {
+	for _, r := range value {
+		if !unicode.IsNumber(r) {
+			a.addErrorMsg(fmt.Sprintf(errMsgNot, value, "only digits"), msgArgs...)
+			return false
+		}
+	}
+
+	return true
+}
+
+// Letters returns true if a given value only contains letter runes.
+func (a *Assertion) Letters(value string, msgArgs ...interface{}) bool {
+	for _, r := range value {
+		if !unicode.IsLetter(r) {
+			a.addErrorMsg(fmt.Sprintf(errMsgNot, value, "only letters"), msgArgs...)
+			return false
+		}
+	}
+
+	return true
+}
+
 // Email returns true if a given value is a valid email format. It allows local
 // portion to be quoted text and ipv4 for the domain portion (between square brackets).
 func (a *Assertion) Email(value string, msgArgs ...interface{}) bool {

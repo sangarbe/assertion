@@ -25,6 +25,43 @@ func TestAssertion_Alfanum_ReturnsFalse(t *testing.T) {
 	assertAllReturnsFalse(t, data)
 }
 
+func TestAssertion_Digits_ReturnsTrue(t *testing.T) {
+	data := []MethodDataOK{
+		{"Digits", []interface{}{"0123456789"}},
+	}
+
+	assertAllReturnsTrue(t, data)
+}
+
+func TestAssertion_Digits_ReturnsFalse(t *testing.T) {
+	data := []MethodDataKO{
+		{"Digits", []interface{}{"abc123"}, "abc123 is not only digits"},
+		{"Digits", []interface{}{"123.456"}, "123.456 is not only digits"},
+		{"Digits", []interface{}{"123#"}, "123# is not only digits"},
+	}
+
+	assertAllReturnsFalse(t, data)
+}
+
+func TestAssertion_Letters_ReturnsTrue(t *testing.T) {
+	data := []MethodDataOK{
+		{"Letters", []interface{}{"abcDEFáöß"}},
+	}
+
+	assertAllReturnsTrue(t, data)
+}
+
+func TestAssertion_Letters_ReturnsFalse(t *testing.T) {
+	data := []MethodDataKO{
+		{"Letters", []interface{}{"abc123"}, "abc123 is not only letters"},
+		{"Letters", []interface{}{"abc.DEF"}, "abc.DEF is not only letters"},
+		{"Letters", []interface{}{"abc DEF"}, "abc DEF is not only letters"},
+		{"Letters", []interface{}{"abc#"}, "abc# is not only letters"},
+	}
+
+	assertAllReturnsFalse(t, data)
+}
+
 func TestAssertion_Email_ReturnsTrue(t *testing.T) {
 	data := []MethodDataOK{
 		{"Email", []interface{}{"test@mail.com"}},
