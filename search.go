@@ -2,6 +2,7 @@ package assertion
 
 import (
 	"fmt"
+	"reflect"
 	"strings"
 )
 
@@ -64,4 +65,20 @@ func (a *Assertion) ContainsInsensitive(value, needle string, msgArgs ...interfa
 	}
 
 	return true
+}
+
+// HasKey returns true if a given key exists on the a given map
+func (a *Assertion) HasKey(value interface{}, key interface{}, msgArgs ...interface{}) bool {
+
+	v := reflect.ValueOf(value)
+	if v.Kind() == reflect.Map {
+		for _, k := range v.MapKeys() {
+			if reflect.DeepEqual(k.Interface(), key){
+				return true
+			}
+		}
+	}
+
+	a.addErrorMsg(fmt.Sprintf(errMsgNotHasKey, value, key), msgArgs...)
+	return false
 }

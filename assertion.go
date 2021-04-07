@@ -21,6 +21,7 @@ const (
 	errMsgNotStartsWith     = `%v does not start with %v`
 	errMsgNotEndsWith       = `%v does not end with %v`
 	errMsgNotContains       = `%v does not contain %v`
+	errMsgNotHasKey         = `%v has not the key %v`
 )
 
 // Assertion represents a data assertion process. It provides several methods

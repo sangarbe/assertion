@@ -119,3 +119,22 @@ func TestAssertion_ContainsInsensitive_ReturnsFalse(t *testing.T) {
 
 	assertAllReturnsFalse(t, data)
 }
+
+func TestAssertion_HasKey_ReturnsTrue(t *testing.T) {
+	data := []MethodDataOK{
+		{"HasKey", []interface{}{map[string]string{"a": "a"}, "a"}},
+		{"HasKey", []interface{}{map[int]string{1: "a"}, 1}},
+	}
+
+	assertAllReturnsTrue(t, data)
+}
+
+func TestAssertion_HasKey_ReturnsFalse(t *testing.T) {
+	data := []MethodDataKO{
+		{"HasKey", []interface{}{"Hello world!", "lloworld"}, "Hello world! has not the key lloworld"},
+		{"HasKey", []interface{}{map[string]string{"a": "a"}, "b"}, "map[a:a] has not the key b"},
+		{"HasKey", []interface{}{map[int]string{1: "a"}, 2}, "map[1:a] has not the key 2"},
+	}
+
+	assertAllReturnsFalse(t, data)
+}
