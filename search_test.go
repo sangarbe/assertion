@@ -59,3 +59,63 @@ func TestAssertion_Contains_ReturnsFalse(t *testing.T) {
 
 	assertAllReturnsFalse(t, data)
 }
+
+func TestAssertion_StartsWithInsensitive_ReturnsTrue(t *testing.T) {
+	data := []MethodDataOK{
+		{"StartsWithInsensitive", []interface{}{"Hello world!", "Hello"}},
+		{"StartsWithInsensitive", []interface{}{"Hello world!", "hello"}},
+		{"StartsWithInsensitive", []interface{}{"esdrújula", "ESDRÚ"}},
+		{"StartsWithInsensitive", []interface{}{"ESDRÚJULA", "esdrú"}},
+		{"StartsWithInsensitive", []interface{}{"#especial", "#esp"}},
+		{"StartsWithInsensitive", []interface{}{"Straße", "straß"}},
+	}
+
+	assertAllReturnsTrue(t, data)
+}
+
+func TestAssertion_StartsWithInsensitive_ReturnsFalse(t *testing.T) {
+	data := []MethodDataKO{
+		{"StartsWithInsensitive", []interface{}{"Hello world!", "ello"}, "Hello world! does not start with ello"},
+	}
+
+	assertAllReturnsFalse(t, data)
+}
+
+func TestAssertion_EndsWithInsensitive_ReturnsTrue(t *testing.T) {
+	data := []MethodDataOK{
+		{"EndsWithInsensitive", []interface{}{"Hello world!", "world!"}},
+		{"EndsWithInsensitive", []interface{}{"Hello WORLD!", "world!"}},
+		{"EndsWithInsensitive", []interface{}{"Hello world!", "WORLD!"}},
+	}
+
+	assertAllReturnsTrue(t, data)
+}
+
+func TestAssertion_EndsWithInsensitive_ReturnsFalse(t *testing.T) {
+	data := []MethodDataKO{
+		{"EndsWithInsensitive", []interface{}{"Hello world!", "world"}, "Hello world! does not end with world"},
+		{"EndsWithInsensitive", []interface{}{"Hello world!", "Hello"}, "Hello world! does not end with Hello"},
+	}
+
+	assertAllReturnsFalse(t, data)
+}
+
+func TestAssertion_ContainsInsensitive_ReturnsTrue(t *testing.T) {
+	data := []MethodDataOK{
+		{"ContainsInsensitive", []interface{}{"Hello world!", "WORLD"}},
+		{"ContainsInsensitive", []interface{}{"Hello WORLD!", "WORLD"}},
+		{"ContainsInsensitive", []interface{}{"Hello world!", "HELLO"}},
+		{"ContainsInsensitive", []interface{}{"HELLO world!", "hello"}},
+		{"ContainsInsensitive", []interface{}{"Hello world!", "World"}},
+	}
+
+	assertAllReturnsTrue(t, data)
+}
+
+func TestAssertion_ContainsInsensitive_ReturnsFalse(t *testing.T) {
+	data := []MethodDataKO{
+		{"ContainsInsensitive", []interface{}{"Hello world!", "lloworld"}, "Hello world! does not contain lloworld"},
+	}
+
+	assertAllReturnsFalse(t, data)
+}
